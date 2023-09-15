@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
+    "username": "muhammadanassajid",
     "password": null,
-    "database": "database_development",
+    "database": "travel-company-website",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
+    "username": "muhammadanassajid",
     "password": null,
-    "database": "database_test",
+    "database": "travel-company-website",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "production": {
-    "username": "root",
+    "username": "muhammadanassajid",
     "password": null,
-    "database": "database_production",
+    "database": "travel-company-website",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   }
 }
