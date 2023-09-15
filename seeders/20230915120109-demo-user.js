@@ -1,8 +1,7 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  // eslint-disable-next-line no-unused-vars
+  async up(_queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -11,15 +10,16 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
+     */
   },
 
-  async down (queryInterface, Sequelize) {
+  // eslint-disable-next-line no-unused-vars
+  async down(_queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  }
+  },
 };
