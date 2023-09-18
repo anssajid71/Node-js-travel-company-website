@@ -1,26 +1,30 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Model } from 'sequelize';
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate() {
-      // define association here
-    }
+    static associate() {}
   }
   User.init(
     {
-      email: DataTypes.STRING,
+    id: DataTypes.INTEGER,
+  },
+    {
+      Name: DataTypes.STRING,
     },
     {
+      Email: DataTypes.STRING,
+    },
+    {
+      Password: DataTypes.STRING,
+    },
+    {
+      RetypePasword: DataTypes.STRING,
+    },
+    {
+      UserType: DataTypes.ENUM,
+    },{
       sequelize,
       modelName: 'User',
-      // eslint-disable-next-line comma-dangle
-    }
-  );
-  return User;
-};
+    });
+    
+    module.exports = User;
