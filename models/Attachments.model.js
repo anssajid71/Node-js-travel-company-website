@@ -1,27 +1,36 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Attachments extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Attachments.hasMany(models.Hotels, {
+        foreignKey: 'attachment_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        targetKey: 'id',
+        as: 'hotels',
+      });
+      Attachments.belongsTo(models.packages, {
+        foreignKey: 'attachment_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        targetKey: 'id',
+        as: 'packages',
+      });
     }
   }
-  Attachments.init({
-    attachment_id: DataTypes.INTEGER,
-    attachment_type: DataTypes.STRING,
-    attachment_url: DataTypes.STRING,
-    created_at: DataTypes.STRING,
-    updated_at: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Attachments',
-  });
+  Attachments.init(
+    {
+      attachment_id: DataTypes.INTEGER,
+      attachment_type: DataTypes.STRING,
+      attachment_url: DataTypes.STRING,
+      created_at: DataTypes.STRING,
+      updated_at: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Attachments',
+    }
+  );
   return Attachments;
 };

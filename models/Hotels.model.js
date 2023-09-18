@@ -1,25 +1,37 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Hotels extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Hotels.associate = (models) => {
+        Hotels.hasMany(models.Packages, {
+          foreignKey: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+          targetKey: 'id',
+          as: 'packages',
+        });
+
+        Hotels.belongsTo(models.Attachments, {
+          foreignKey: 'attachment_id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+          targetKey: 'id',
+          as: 'attachments',
+        });
+      };
     }
   }
-  Hotels.init({
-    hotel_name: DataTypes.STRING,
-    location: DataTypes.STRING,
-    images: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Hotels',
-  });
+  Hotels.init(
+    {
+      hotel_name: DataTypes.STRING,
+      location: DataTypes.STRING,
+      images: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Hotels',
+    }
+  );
   return Hotels;
 };

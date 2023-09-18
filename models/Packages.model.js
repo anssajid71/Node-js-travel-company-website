@@ -2,13 +2,28 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Packages extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Packages.associate = (models) => {
+        Packages.belongsTo(models.Hotels, {
+          foreignKey: 'id',
+          targetKey: 'id',
+          as: 'hotels',
+        });
+        Packages.hasMany(models.Attachments, {
+          foreignKey: 'attachment_id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+          targetKey: 'id',
+          as: 'attachments',
+        });
+        Packages.belongsTo(models.Services, {
+          foreignKey: 'package_id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+          targetKey: 'id',
+          as: 'services',
+        });
+      };
     }
   }
   Packages.init(
