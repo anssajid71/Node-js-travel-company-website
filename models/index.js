@@ -1,44 +1,50 @@
-const { Sequelize } = require('sequelize');
-const UserModel = require('./User.model');
-const CompaniesModel = require('./Companies.model');
-const PackagesModel = require('./Packages.model');
-const ServicesModel = require('./Services.model');
-const ReviewsModel = require('./Reviews.model');
-const AttachmentsModel = require('./Attachments.model');
-const BookingModel = require('./Booking.model');
-const HotelsModel = require('./Hotels.model');
+'use strict';
 
-const sequelize = new Sequelize(
-  'your_database_name',
-  'your_username',
-  'your_password',
-  {
-    host: 'localhost',
-    dialect: 'postgres',
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const process = require('process');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.json')[env];
+const db = {};
+
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === '.js' &&
+      file.indexOf('.test.js') === -1
+    );
+  })
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes
+    );
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
   }
-);
+});
 
-// Initialize the Sequelize models with the Sequelize instance
-const User = UserModel(sequelize);
-const Companies = CompaniesModel(sequelize);
-const Packages = PackagesModel(sequelize);
-const Services = ServicesModel(sequelize);
-const Reviews = ReviewsModel(sequelize);
-const Attachments = AttachmentsModel(sequelize);
-const Booking = BookingModel(sequelize);
-const Hotels = HotelsModel(sequelize);
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-// Define associations (if you have any) between the models here
-
-// Export the Sequelize instance and models
-module.exports = {
-  sequelize,
-  User,
-  Companies,
-  Packages,
-  Services,
-  Reviews,
-  Attachments,
-  Booking,
-  Hotels,
-};
+module.exports = db;

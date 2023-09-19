@@ -7,55 +7,56 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       price: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL,
       },
       start_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       end_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       total_days: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       type: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       images: {
-        type: Sequelize.ARRAY
+        type: Sequelize.ARRAY(Sequelize.STRING), // Define the data type of elements (in this case, strings)
+        allowNull: true, // Adjust allowNull based on your requirements
       },
       available_seats: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       location: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       created_at: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       updated_at: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Packages');
-  }
+  },
 };
