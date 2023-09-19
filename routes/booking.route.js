@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const BookingController = require('../controllers/BookingController');
+const BookingController = require('../controllers/booking.controller');
 
 router.get('/', BookingController.getAllBookings);
 router.get('/:id', BookingController.getBookingById);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const CompaniesController = require('../controllers/CompaniesController');
+const CompaniesController = require('../controllers/companies.controller');
 
 router.get('/', CompaniesController.getAllCompanies);
 router.get('/:id', CompaniesController.getCompanyById);

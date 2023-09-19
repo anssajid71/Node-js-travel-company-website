@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PackagesController = require('../controllers/PackagesController');
+const PackagesController = require('../controllers/packages.controller');
 
 router.get('/', PackagesController.getAllPackages);
 router.get('/:id', PackagesController.getPackageById);

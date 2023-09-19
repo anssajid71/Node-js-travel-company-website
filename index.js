@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const express = require('express');
 
 // Import your models
@@ -47,8 +47,9 @@ sequelize
     });
 
     // Import middleware (if needed)
-    const authMiddleware = require('./middlewares/auth.middleware');
-    const authMiddleware = require('./middlewares/validation.middleware');
+    const userMiddleware = require('./middlewares/user.middleware').default;
+    const companiesMiddleware =
+      require('./middlewares/companies.middleware').default;
 
     // Import routes for each model
     const userRoutes = require('./routes/user.route');
@@ -60,8 +61,8 @@ sequelize
     const hotelsRoutes = require('./routes/hotels.routes');
 
     // Use middleware (if needed)
-    app.use(authMiddleware);
-    app.use(validationMiddleware);
+    app.use(userMiddleware);
+    app.use(companiesMiddleware);
 
     // Use routes
     app.use('/users', userRoutes);
