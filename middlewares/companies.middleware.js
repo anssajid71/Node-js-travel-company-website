@@ -1,11 +1,13 @@
-const hasCompanyPermissions = (req, res, next) => {
-  if (req.user && req.user.role === 'Admin') {
-    next(); // User has permissions, proceed to the next middleware or route handler
-  } else {
-    res.status(403).json({ message: 'Permission denied' }); // User does not have permissions
+const validateCompanyData = (req, res, next) => {
+  const { name, user_id, phone_number } = req.body;
+
+  if (!name || !user_id || !phone_number) {
+    return res.status(400).json({ message: 'Missing required fields' });
   }
+
+  next();
 };
 
-export default {
-  hasCompanyPermissions,
+module.exports = {
+  validateCompanyData,
 };

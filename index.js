@@ -1,16 +1,12 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const express = require('express');
-
-// Import your models
-const {
-  User,
-  Companies,
-  Packages,
-  Services,
-  Attachments,
-  Booking,
-  Hotels,
-} = require('./models');
+const User = require('./models/User.model');
+const Companies = require('./models/Companies.model');
+const Packages = require('./models/Packages.model');
+const Services = require('./models/Services.model');
+const Attachments = require('./models/Attachments.model');
+const Booking = require('./models/Booking.model');
+const Hotels = require('./models/Hotels.model');
 
 // Create an Express application
 const app = express();
@@ -32,8 +28,10 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+// Define the User model with ENUM values for "role"
+
 // Load models and establish associations
-(async () => {
+async () => {
   try {
     await sequelize.sync(); // This will create tables if they don't exist
     console.log('Models synced with the database');
@@ -41,15 +39,61 @@ sequelize
     // Your application logic can go here
 
     // Example: Define a route to retrieve all users
+    // Retrieve all users
     app.get('/users', async (req, res) => {
       const users = await User.findAll();
       res.json(users);
+    });
+
+    // Retrieve all companies
+    app.get('/companies', async (req, res) => {
+      const companies = await Companies.findAll();
+      res.json(companies);
+    });
+
+    // Retrieve all booking
+    app.get('/bookings', async (req, res) => {
+      const bookings = await Booking.findAll();
+      res.json(bookings);
+    });
+
+    // Retrieve all hotels
+    app.get('/hotels', async (req, res) => {
+      const hotels = await Hotels.findAll();
+      res.json(hotels);
+    });
+
+    // Retrieve all packages
+    app.get('/packages', async (req, res) => {
+      const packages = await Packages.findAll();
+      res.json(packages);
+    });
+
+    // Retrieve all attachments
+    app.get('/attachments', async (req, res) => {
+      const attachments = await Attachments.findAll();
+      res.json(attachments);
+    });
+
+    // Retrieve all services
+    app.get('/services', async (req, res) => {
+      const services = await Services.findAll();
+      res.json(services);
     });
 
     // Import middleware (if needed)
     const userMiddleware = require('./middlewares/user.middleware').default;
     const companiesMiddleware =
       require('./middlewares/companies.middleware').default;
+    const hotelsMiddleware = require('./middlewares/hotels.middleware').default;
+    const servicesMiddleware =
+      require('./middlewares/services.middleware').default;
+    const attachmentMiddleware =
+      require('./middlewares/attachment.middleware').default;
+    const packagesMiddleware =
+      require('./middlewares/packages.middleware').default;
+    const bookingMiddleware =
+      require('./middlewares/booking.middleware').default;
 
     // Import routes for each model
     const userRoutes = require('./routes/user.route');
@@ -63,6 +107,11 @@ sequelize
     // Use middleware (if needed)
     app.use(userMiddleware);
     app.use(companiesMiddleware);
+    app.use(hotelsMiddleware);
+    app.use(bookingMiddleware);
+    app.use(packagesMiddleware);
+    app.use(servicesMiddleware);
+    app.use(attachmentMiddleware);
 
     // Use routes
     app.use('/users', userRoutes);
@@ -81,4 +130,4 @@ sequelize
   } catch (error) {
     console.error('Error syncing models:', error);
   }
-})();
+};

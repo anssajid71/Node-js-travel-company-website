@@ -21,6 +21,10 @@ module.exports = {
       type: {
         type: Sequelize.ENUM('Individual', 'Group'), // Define allowed values
         allowNull: false, // Adjust allowNull based on your requirements
+        role: {
+          type: DataTypes.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
+          allowNull: false,
+        },
       },
       total_number_of_persons: {
         type: Sequelize.INTEGER,
@@ -33,6 +37,10 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM('Individual', 'Group'),
+        role: {
+          type: DataTypes.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
+          allowNull: false,
+        },
       },
       payment_method: {
         type: Sequelize.STRING,

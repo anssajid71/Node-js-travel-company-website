@@ -1,11 +1,13 @@
-const isAuthenticated = (req, res, next) => {
-  if (req.user) {
-    next(); // User is authenticated, proceed to the next middleware or route handler
-  } else {
-    res.status(401).json({ message: 'Unauthorized' }); // User is not authenticated
+const validateUserData = (req, res, next) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Missing required fields' });
   }
+
+  next();
 };
 
-export default {
-  isAuthenticated,
+module.exports = {
+  validateUserData,
 };
