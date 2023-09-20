@@ -1,79 +1,71 @@
-const { Companies } = require('../models');
+const { User } = require('../models'); // Assuming you have a User model
 
-// Controller to retrieve all companies
-exports.getAllCompanies = async (req, res) => {
+// Create a new user
+exports.createUser = async (req, res) => {
   try {
-    const companies = await Companies.findAll();
-    res.json(companies);
+    const newUser = await User.create(req.body);
+    res.status(201).json(newUser);
   } catch (error) {
-    console.error('Error fetching companies:', error);
-    res.status(500).json({ error: 'Unable to fetch companies' });
+    res.status(400).json({ error: 'Failed to create user' });
   }
 };
 
-// Controller to retrieve a specific company by ID
-exports.getCompanyById = async (req, res) => {
-  const { id } = req.params;
+// Update an existing user by ID
+exports.updateUser = async (req, res) => {
+  const userId = req.params.id;
   try {
-    const company = await Companies.findByPk(id);
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    res.json(company);
+
+    await user.update(req.body);
+    res.status(200).json(user);
   } catch (error) {
-    console.error('Error fetching company by ID:', error);
-    res.status(500).json({ error: 'Unable to fetch company' });
+    res.status(400).json({ error: 'Failed to update user' });
   }
 };
 
-// Controller to create a new company
-exports.createCompany = async (req, res) => {
-  const { name, logo, phone_number } = req.body;
+// Get all users
+exports.getAllUsers = async (req, res) => {
   try {
-    const company = await Companies.create({
-      name,
-      logo,
-      phone_number,
-    });
-    res.status(201).json(company);
+    const users = await User.findAll();
+    res.status(200).json(users);
   } catch (error) {
-    console.error('Error creating company:', error);
-    res.status(500).json({ error: 'Unable to create company' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Controller to update a specific company by ID
-exports.updateCompany = async (req, res) => {
-  const { id } = req.params;
-  const { name, logo, phone_number } = req.body;
+// Get a user by ID
+exports.getUserById = async (req, res) => {
+  const userId = req.params.id;
   try {
-    const company = await Companies.findByPk(id);
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    company.name = name;
-    company.logo = logo;
-    company.phone_number = phone_number;
-    await company.save();
-    res.json(company);
+
+    res.status(200).json(user);
   } catch (error) {
-    console.error('Error updating company:', error);
-    res.status(500).json({ error: 'Unable to update company' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Controller to delete a specific company by ID
-exports.deleteCompany = async (req, res) => {
-  const { id } = req.params;
+// Delete a user by ID
+exports.deleteUser = async (req, res) => {
+  const userId = req.params.id;
   try {
-    const company = await Companies.findByPk(id);
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    await company.destroy();
-    res.status(204).send();
+
+    await user.destroy();
+    res.status(204).send(); // No content
   } catch (error) {
-    console.error('Error deleting company:', error);
-    res.status(500).json({ error: 'Unable to delete company' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
