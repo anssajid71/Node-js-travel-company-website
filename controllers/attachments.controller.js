@@ -1,5 +1,3 @@
-// attachment.controller.js
-
 const { Attachment } = require('../models'); // Assuming you have an Attachment model
 
 // Create a new attachment
