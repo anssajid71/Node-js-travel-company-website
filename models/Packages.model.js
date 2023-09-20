@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       end_date: DataTypes.DATE,
       total_days: DataTypes.INTEGER,
       type: DataTypes.STRING,
-      images: DataTypes.ARRAY,
+      images: DataTypes.STRING,
       available_seats: DataTypes.INTEGER,
       location: DataTypes.STRING,
       created_at: DataTypes.STRING,

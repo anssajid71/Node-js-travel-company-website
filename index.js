@@ -1,12 +1,14 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const express = require('express');
-const User = require('./models/User.model');
-const Companies = require('./models/Companies.model');
-const Packages = require('./models/Packages.model');
-const Services = require('./models/Services.model');
-const Attachments = require('./models/Attachments.model');
-const Booking = require('./models/Booking.model');
-const Hotels = require('./models/Hotels.model');
+
+// Import routes for each model
+const userRoutes = require('./routes/user.route');
+const companiesRoutes = require('./routes/companies.route');
+const packagesRoutes = require('./routes/packages.route');
+const servicesRoutes = require('./routes/services.route');
+const attachmentsRoutes = require('./routes/attachments.route');
+const bookingRoutes = require('./routes/booking.route');
+const hotelsRoutes = require('./routes/hotels.routes');
 
 // Create an Express application
 const app = express();
@@ -28,11 +30,10 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// Define the User model with ENUM values for "role"
-
 // Load models and establish associations
-async () => {
+const seq = async () => {
   try {
+    console.log('ANS SAJID');
     await sequelize.sync(); // This will create tables if they don't exist
     console.log('Models synced with the database');
 
@@ -81,46 +82,14 @@ async () => {
       res.json(services);
     });
 
-    // Import middleware (if needed)
-    const userMiddleware = require('./middlewares/user.middleware').default;
-    const companiesMiddleware =
-      require('./middlewares/companies.middleware').default;
-    const hotelsMiddleware = require('./middlewares/hotels.middleware').default;
-    const servicesMiddleware =
-      require('./middlewares/services.middleware').default;
-    const attachmentMiddleware =
-      require('./middlewares/attachment.middleware').default;
-    const packagesMiddleware =
-      require('./middlewares/packages.middleware').default;
-    const bookingMiddleware =
-      require('./middlewares/booking.middleware').default;
-
-    // Import routes for each model
-    const userRoutes = require('./routes/user.route');
-    const companiesRoutes = require('./routes/companies.route');
-    const packagesRoutes = require('./routes/packages.route');
-    const servicesRoutes = require('./routes/services.route');
-    const attachmentsRoutes = require('./routes/attachments.route');
-    const bookingRoutes = require('./routes/booking.route');
-    const hotelsRoutes = require('./routes/hotels.routes');
-
-    // Use middleware (if needed)
-    app.use(userMiddleware);
-    app.use(companiesMiddleware);
-    app.use(hotelsMiddleware);
-    app.use(bookingMiddleware);
-    app.use(packagesMiddleware);
-    app.use(servicesMiddleware);
-    app.use(attachmentMiddleware);
-
     // Use routes
-    app.use('/users', userRoutes);
-    app.use('/companies', companiesRoutes);
-    app.use('/packages', packagesRoutes);
-    app.use('/services', servicesRoutes);
-    app.use('/attachments', attachmentsRoutes);
-    app.use('/bookings', bookingRoutes);
-    app.use('/hotels', hotelsRoutes);
+    app.use('/users', userMiddleware, userRoutes);
+    app.use('/companies', companiesMiddleware, companiesRoutes);
+    app.use('/packages', packagesMiddleware, packagesRoutes);
+    app.use('/services', servicesMiddleware, servicesRoutes);
+    app.use('/attachments', attachmentMiddleware, attachmentsRoutes);
+    app.use('/bookings', bookingMiddleware, bookingRoutes);
+    app.use('/hotels', hotelsMiddleware, hotelsRoutes);
 
     // Start the Express server
     const port = process.env.PORT || 3000;
@@ -131,3 +100,4 @@ async () => {
     console.error('Error syncing models:', error);
   }
 };
+seq();
