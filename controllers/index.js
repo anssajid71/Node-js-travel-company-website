@@ -5,6 +5,7 @@ const HotelsController = require('./hotels.controller');
 const BookingController = require('./booking.controller');
 const AttachmentController = require('./attachment.controller');
 const ServicesController = require('./services.controller');
+const AttachmentController = require('../../controllers/attachment.controller');
 
 module.exports = {
   UserController,

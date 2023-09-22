@@ -1,17 +1,8 @@
-const userMiddleware = require('./user.middleware');
-const packagesMiddleware = require('./packages.middleware');
-const companiesMiddleware = require('./companies.middleware');
-const hotelsMiddleware = require('./hotels.middleware');
-const bookingMiddleware = require('./booking.middleware');
-const attachmentMiddleware = require('./attachment.middleware');
-const servicesMiddleware = require('./services.middleware');
+// const authMiddleware = require('./auth.middleware');
+// const userMiddleware = require('./user.middleware');
+// // Add more middleware modules here if needed
 
-module.exports = {
-  userMiddleware,
-  packagesMiddleware,
-  companiesMiddleware,
-  hotelsMiddleware,
-  bookingMiddleware,
-  attachmentMiddleware,
-  servicesMiddleware,
-};
+// module.exports = {
+//   authMiddleware,
+//   userMiddleware,
+// };

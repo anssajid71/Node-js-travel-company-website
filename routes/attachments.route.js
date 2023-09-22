@@ -1,23 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const AttachmentController = require('../controllers/attachment.controller');
-const attachmentMiddleware = require('../middlewares/attachment.middleware');
+const AttachmentController = require('../controllers/attachments.controller');
 
-router.post(
-  '/',
-  attachmentMiddleware.validateAttachmentData,
-  AttachmentController.createAttachment
-);
-router.put(
-  '/:id',
-  attachmentMiddleware.validateAttachmentData,
-  AttachmentController.updateAttachment
-);
-
-router.get('/', AttachmentController.getAllAttachments);
-router.get('/:id', AttachmentController.getAttachmentById);
+// Create a new attachment
 router.post('/', AttachmentController.createAttachment);
+
+// Update an attachment by ID
 router.put('/:id', AttachmentController.updateAttachment);
+
+// Get all attachments
+router.get('/', AttachmentController.getAllAttachments);
+
+// Get an attachment by ID
+router.get('/:id', AttachmentController.getAttachmentById);
+
+// Delete an attachment by ID
 router.delete('/:id', AttachmentController.deleteAttachment);
 
 module.exports = router;

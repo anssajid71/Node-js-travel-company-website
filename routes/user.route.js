@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/user.controller');
-const UserMiddleware = require('../middlewares/user.middleware').default;
+const { verifyToken } = require('../middlewares/auth.middleware');
+const { createUser } = require('../controllers/user.controller');
 
-router.post('/', UserMiddleware.validateUserData, UserController.createUser);
-router.put('/:id', UserMiddleware.validateUserData, UserController.updateUser);
+const { User } = require('../models/User.model');
+router.post('/create', createUser);
+router.get('/profile', verifyToken, UserController.getUserProfile);
+router.post('/', UserController.createUser);
+router.put('/:id', UserController.updateUser);
 
-router.get('/', User.UserController.getAllUsers);
 router.get('/:id', UserController.getUserById);
 router.post('/', UserController.createUser);
 router.put('/:id', UserController.updateUser);

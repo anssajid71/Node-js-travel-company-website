@@ -1,14 +1,28 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const express = require('express');
+const jwt = require('jsonwebtoken'); // Import the 'jsonwebtoken' module
+const jwtSecret = process.env.JWT_SECRET; // Load the secret key from the environment variable
 
-// Import routes for each model
+// Use jwtSecret when signing JWT tokens
+
+const crypto = require('crypto');
+
+// Generate a random secret key with 32 bytes (256 bits)
+const secretKey = crypto.randomBytes(32).toString('hex');
+
+console.log('Generated Secret Key:', secretKey);
+
+// Import other modules and routes
 const userRoutes = require('./routes/user.route');
 const companiesRoutes = require('./routes/companies.route');
 const packagesRoutes = require('./routes/packages.route');
 const servicesRoutes = require('./routes/services.route');
 const attachmentsRoutes = require('./routes/attachments.route');
 const bookingRoutes = require('./routes/booking.route');
-const hotelsRoutes = require('./routes/hotels.routes');
+const hotelsRoutes = require('./routes/hotels.route');
+const authMiddleware = require('./middlewares/auth.middleware');
+const userMiddleware = require('./middlewares/user.middleware');
+const AttachmentController = require('./controllers/attachments.controller');
 
 // Create an Express application
 const app = express();
@@ -41,9 +55,9 @@ const seq = async () => {
 
     // Example: Define a route to retrieve all users
     // Retrieve all users
-    app.get('/users', async (req, res) => {
-      const users = await User.findAll();
-      res.json(users);
+    app.get('/user', async (req, res) => {
+      const user = await user.findAll();
+      res.json(user);
     });
 
     // Retrieve all companies
@@ -83,13 +97,15 @@ const seq = async () => {
     });
 
     // Use routes
-    app.use('/users', userMiddleware, userRoutes);
-    app.use('/companies', companiesMiddleware, companiesRoutes);
-    app.use('/packages', packagesMiddleware, packagesRoutes);
-    app.use('/services', servicesMiddleware, servicesRoutes);
-    app.use('/attachments', attachmentMiddleware, attachmentsRoutes);
-    app.use('/bookings', bookingMiddleware, bookingRoutes);
-    app.use('/hotels', hotelsMiddleware, hotelsRoutes);
+    app.use('/users', userRoutes);
+    app.use('/companies', companiesRoutes);
+    app.use('/packages', packagesRoutes);
+    app.use('/services', servicesRoutes);
+    app.use('/attachments', attachmentsRoutes);
+    app.use('/bookings', bookingRoutes);
+    app.use('/hotels', hotelsRoutes);
+    app.use('/middlewares', userRoutes);
+    app.use('/controllers', attachmentsRoutes);
 
     // Start the Express server
     const port = process.env.PORT || 3000;
