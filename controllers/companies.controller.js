@@ -1,7 +1,18 @@
-const { Companies } = require('../models'); // Assuming you have a Companies model
+const { Companies } = require('../models/Companies.model');
+const {
+  validateCompanyCreation,
+  validateCompanyUpdate,
+  handleValidationErrors,
+} = require('../validations/companies.validation');
 
 // Create a new company
 exports.createCompany = async (req, res) => {
+  // Apply validation middleware
+  validateCompanyCreation.forEach((validation) =>
+    validation(req, res, () => {})
+  );
+  handleValidationErrors(req, res);
+
   try {
     const newCompany = await Companies.create(req.body);
     res.status(201).json(newCompany);
@@ -13,6 +24,10 @@ exports.createCompany = async (req, res) => {
 // Update an existing company by ID
 exports.updateCompany = async (req, res) => {
   const companyId = req.params.id;
+  // Apply validation middleware
+  validateCompanyUpdate.forEach((validation) => validation(req, res, () => {}));
+  handleValidationErrors(req, res);
+
   try {
     const company = await Companies.findByPk(companyId);
 

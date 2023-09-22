@@ -1,8 +1,19 @@
-const { Services } = require('../models'); // Assuming you have a Services model
+const { Services } = require('../models/Services.model');
+const {
+  createServiceValidation,
+  updateServiceValidation,
+  handleValidationErrors,
+} = require('../validations/services.validation');
 
 // Create a new service
 exports.createService = async (req, res) => {
   try {
+    // Apply validation middleware
+    createServiceValidation.forEach((validation) =>
+      validation(req, res, () => {})
+    );
+    handleValidationErrors(req, res);
+
     const newService = await Services.create(req.body);
     res.status(201).json(newService);
   } catch (error) {
@@ -14,6 +25,12 @@ exports.createService = async (req, res) => {
 exports.updateService = async (req, res) => {
   const serviceId = req.params.id;
   try {
+    // Apply validation middleware
+    updateServiceValidation.forEach((validation) =>
+      validation(req, res, () => {})
+    );
+    handleValidationErrors(req, res);
+
     const service = await Services.findByPk(serviceId);
 
     if (!service) {

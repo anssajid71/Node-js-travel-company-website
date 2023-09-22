@@ -1,9 +1,18 @@
-// booking.controller.js
-
-const { Booking } = require('../models'); // Assuming you have a Booking model
+const { Booking } = require('../models/Booking.model');
+const {
+  validateBookingCreation,
+  validateBookingUpdate,
+  handleValidationErrors,
+} = require('../validations/booking.validation');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
+  // Apply validation middleware
+  validateBookingCreation.forEach((validation) =>
+    validation(req, res, () => {})
+  );
+  handleValidationErrors(req, res);
+
   try {
     const newBooking = await Booking.create(req.body);
     res.status(201).json(newBooking);
@@ -15,6 +24,10 @@ exports.createBooking = async (req, res) => {
 // Update an existing booking by ID
 exports.updateBooking = async (req, res) => {
   const bookingId = req.params.id;
+  // Apply validation middleware
+  validateBookingUpdate.forEach((validation) => validation(req, res, () => {}));
+  handleValidationErrors(req, res);
+
   try {
     const booking = await Booking.findByPk(bookingId);
 

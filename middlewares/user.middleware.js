@@ -1,5 +1,4 @@
 const { ERROR_CODES, ERROR_MESSAGES } = require('../constants'); // Adjust the path to match your project structure
-const jwt = require('jsonwebtoken');
 
 // Middleware to validate user data for create and update routes
 const validateUserData = (req, res, next) => {

@@ -1,7 +1,18 @@
-const { Attachment } = require('../models'); // Assuming you have an Attachment model
+const { Attachment } = require('../models/Attachments.model');
+const {
+  validateAttachmentCreation,
+  validateAttachmentUpdate,
+  handleValidationErrors,
+} = require('../validations/attachments.validation');
 
 // Create a new attachment
 exports.createAttachment = async (req, res) => {
+  // Apply validation middleware
+  validateAttachmentCreation.forEach((validation) =>
+    validation(req, res, () => {})
+  );
+  handleValidationErrors(req, res);
+
   try {
     const newAttachment = await Attachment.create(req.body);
     res.status(201).json(newAttachment);
@@ -13,6 +24,12 @@ exports.createAttachment = async (req, res) => {
 // Update an existing attachment by ID
 exports.updateAttachment = async (req, res) => {
   const attachmentId = req.params.id;
+  // Apply validation middleware
+  validateAttachmentUpdate.forEach((validation) =>
+    validation(req, res, () => {})
+  );
+  handleValidationErrors(req, res);
+
   try {
     const attachment = await Attachment.findByPk(attachmentId);
 

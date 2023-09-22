@@ -1,9 +1,16 @@
-// hotels.controller.js
-
-const { Hotels } = require('../models'); // Assuming you have a Hotels model
+const { Hotels } = require('../models/Hotels.model');
+const {
+  validateHotelCreation,
+  validateHotelUpdate,
+  handleValidationErrors,
+} = require('../validations/hotels.validation');
 
 // Create a new hotel
 exports.createHotel = async (req, res) => {
+  // Apply validation middleware
+  validateHotelCreation.forEach((validation) => validation(req, res, () => {}));
+  handleValidationErrors(req, res);
+
   try {
     const newHotel = await Hotels.create(req.body);
     res.status(201).json(newHotel);
@@ -15,6 +22,10 @@ exports.createHotel = async (req, res) => {
 // Update an existing hotel by ID
 exports.updateHotel = async (req, res) => {
   const hotelId = req.params.id;
+  // Apply validation middleware
+  validateHotelUpdate.forEach((validation) => validation(req, res, () => {}));
+  handleValidationErrors(req, res);
+
   try {
     const hotel = await Hotels.findByPk(hotelId);
 

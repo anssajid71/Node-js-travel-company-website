@@ -20,7 +20,7 @@ const servicesRoutes = require('./routes/services.route');
 const attachmentsRoutes = require('./routes/attachments.route');
 const bookingRoutes = require('./routes/booking.route');
 const hotelsRoutes = require('./routes/hotels.route');
-const authMiddleware = require('./middlewares/auth.middleware');
+const authMiddleware = require('./middlewares/auth');
 const userMiddleware = require('./middlewares/user.middleware');
 const AttachmentController = require('./controllers/attachments.controller');
 
@@ -55,6 +55,11 @@ const seq = async () => {
 
     // Example: Define a route to retrieve all users
     // Retrieve all users
+
+    app.get('/user', async (req, res) => {
+      const user = await user.findAll();
+      res.json(user);
+    });
     app.get('/user', async (req, res) => {
       const user = await user.findAll();
       res.json(user);

@@ -1,9 +1,18 @@
-// packages.controller.js
-
-const { Packages } = require('../models'); // Assuming you have a Packages model
+const { Packages } = require('../models/Packages.model');
+const {
+  validatePackageCreation,
+  validatePackageUpdate,
+  handleValidationErrors,
+} = require('../validations/packages.validation');
 
 // Create a new package
 exports.createPackage = async (req, res) => {
+  // Apply validation middleware
+  validatePackageCreation.forEach((validation) =>
+    validation(req, res, () => {})
+  );
+  handleValidationErrors(req, res);
+
   try {
     const newPackage = await Packages.create(req.body);
     res.status(201).json(newPackage);
@@ -15,6 +24,10 @@ exports.createPackage = async (req, res) => {
 // Update an existing package by ID
 exports.updatePackage = async (req, res) => {
   const packageId = req.params.id;
+  // Apply validation middleware
+  validatePackageUpdate.forEach((validation) => validation(req, res, () => {}));
+  handleValidationErrors(req, res);
+
   try {
     const package = await Packages.findByPk(packageId);
 
