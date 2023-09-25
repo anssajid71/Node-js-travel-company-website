@@ -1,6 +1,5 @@
 const User = require('../models/User.model');
-const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../config');
+
 const {
   validateUserRegistration,
   validateUserLogin,
@@ -44,15 +43,9 @@ exports.createUser = async (req, res) => {
     });
 
     // Generate a JWT token
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
-      process.env.jwt_Secret,
-      {
-        expiresIn: '1h',
-      }
-    );
+    const token = generateToken(newUser); // You need to implement the generateToken function
 
-    res.status(201).json({ message: 'User created successfully' });
+    res.status(201).json({ message: 'User created successfully', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -79,25 +72,15 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.jwt_Secret,
-      {
-        expiresIn: '1h',
-      }
-    );
+    // Generate a JWT token
+    const token = generateToken(user); // You need to implement the generateToken function
 
-    res.cookie('access_token', token, { httpOnly: true }).status(200).json({
-      message: 'Login successful',
-      user,
-    });
+    res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-// Update a user by ID
 exports.updateUser = async (req, res) => {
   try {
     // Your user update logic here
@@ -109,28 +92,6 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-// Get user profile (requires token verification)
-exports.getUserProfile = (req, res) => {
-  // Access the authenticated user through req.user
-  const authenticatedUser = req.user;
-
-  // Your logic to retrieve and send the user's profile here
-  res.status(200).json(authenticatedUser);
-};
-
-// Get all users
-exports.getAllUsers = async (req, res) => {
-  try {
-    // Your logic to retrieve all users here
-    // Example: const users = await User.findAll();
-    res.status(200).json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
 // Get a user by ID
 exports.getUserById = async (req, res) => {
   try {
@@ -145,13 +106,12 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 // Delete a user by ID
 exports.deleteUser = async (req, res) => {
   try {
     // Your logic to delete a user by ID here
     // Example: const deletedUser = await User.destroy({ where: { id: req.params.id } });
-    res.status(204).send();
+    res.status(204).send(); // No content
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

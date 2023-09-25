@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const express = require('express');
-const jwt = require('jsonwebtoken'); // Import the 'jsonwebtoken' module
-const jwtSecret = process.env.JWT_SECRET; // Load the secret key from the environment variable
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const protectedRoutes = require('./routes/protected');
 
 // Use jwtSecret when signing JWT tokens
 
@@ -111,6 +112,13 @@ const seq = async () => {
     app.use('/hotels', hotelsRoutes);
     app.use('/middlewares', userRoutes);
     app.use('/controllers', attachmentsRoutes);
+    app.use(bodyParser.json());
+
+    // Use the authentication routes
+    app.use('/auth', authRoutes);
+
+    // Use the protected routes (requires authentication)
+    app.use('/protected', protectedRoutes);
 
     // Start the Express server
     const port = process.env.PORT || 3000;
