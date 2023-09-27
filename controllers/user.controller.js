@@ -9,43 +9,44 @@ const {
 // Create a new user
 exports.createUser = async (req, res) => {
   // Apply validation middleware
-  validateUserRegistration.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
+  // validateUserRegistration.forEach((validation) =>
+  //   validation(req, res, () => {})
+  // );
+  // handleValidationErrors(req, res);
 
   try {
-    const { name, email, phone_number, password, retype_password, role } =
-      req.body;
+    console.log('req.boday ', req.body);
+    //   const { name, email, phone_number, password, retype_password, role } =
+    //     req.body;
 
-    if (!name || !email || !password || !retype_password || !role) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
+    //   if (!name || !email || !password || !retype_password || !role) {
+    //     return res.status(400).json({ error: 'All fields are required' });
+    //   }
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
-    }
+    //   if (!/\S+@\S+\.\S+/.test(email)) {
+    //     return res.status(400).json({ error: 'Invalid email format' });
+    //   }
 
-    if (password !== retype_password) {
-      return res.status(400).json({ error: 'Retyped password does not match' });
-    }
+    //   if (password !== retype_password) {
+    //     return res.status(400).json({ error: 'Retyped password does not match' });
+    //   }
 
-    if (role !== 'admin' && role !== 'user') {
-      return res.status(400).json({ error: 'Invalid role' });
-    }
+    //   if (role !== 'admin' && role !== 'user') {
+    //     return res.status(400).json({ error: 'Invalid role' });
+    //   }
 
-    const newUser = await User.create({
-      name,
-      email,
-      phone_number,
-      password,
-      role,
-    });
+    //   const newUser = await User.create({
+    //     name,
+    //     email,
+    //     phone_number,
+    //     password,
+    //     role,
+    //   });
 
-    // Generate a JWT token
-    const token = generateToken(newUser); // You need to implement the generateToken function
+    // // Generate a JWT token
+    // const token = generateToken(newUser); // You need to implement the generateToken function
 
-    res.status(201).json({ message: 'User created successfully', token });
+    // res.status(201).json({ message: 'User created successfully', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

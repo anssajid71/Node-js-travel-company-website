@@ -1,20 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const AttachmentController = require('../controllers/attachments.controller');
+const AttachmentsController = require('../controllers/attachments.controller');
+const {
+  validateAttachmentCreation,
+  validateAttachmentUpdate,
+  handleValidationErrors,
+} = require('../validations/attachments.validation');
 
 // Create a new attachment
-router.post('/', AttachmentController.createAttachment);
+router.post(
+  '/',
+  validateAttachmentCreation,
+  handleValidationErrors,
+  AttachmentsController.createAttachment
+);
 
 // Update an attachment by ID
-router.put('/:id', AttachmentController.updateAttachment);
+router.put(
+  '/:id',
+  validateAttachmentUpdate,
+  handleValidationErrors,
+  AttachmentsController.updateAttachment
+);
 
 // Get all attachments
-router.get('/', AttachmentController.getAllAttachments);
+router.get('/', AttachmentsController.getAllAttachments);
 
 // Get an attachment by ID
-router.get('/:id', AttachmentController.getAttachmentById);
+router.get('/:id', AttachmentsController.getAttachmentById);
 
 // Delete an attachment by ID
-router.delete('/:id', AttachmentController.deleteAttachment);
+router.delete('/:id', AttachmentsController.deleteAttachment);
 
 module.exports = router;

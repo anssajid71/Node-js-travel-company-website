@@ -1,15 +1,13 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const { jwtSecret } = require('../config');
-const User = require('../models/User.model'); // Import your User model
+const { jwtSecret } = require('../middlewares/env');
+const User = require('../models/User.model');
 
 // Login route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
   try {
-    // Replace with your actual user authentication logic
     const user = await User.findOne({ email });
 
     if (!user || user.password !== password) {

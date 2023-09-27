@@ -1,14 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const BookingController = require('../controllers/booking.controller');
+const BookingsController = require('../controllers/booking.controller');
+const {
+  validateBookingCreation,
+  validateBookingUpdate,
+  handleValidationErrors,
+} = require('../validations/booking.validation');
 
-router.post('/', BookingController.createBooking);
-router.put('/:id', BookingController.updateBooking);
+// Create a new booking
+router.post(
+  '/',
+  validateBookingCreation,
+  handleValidationErrors,
+  BookingsController.createBooking
+);
 
-router.get('/', BookingController.getAllBookings);
-router.get('/:id', BookingController.getBookingById);
-router.post('/', BookingController.createBooking);
-router.put('/:id', BookingController.updateBooking);
-router.delete('/:id', BookingController.deleteBooking);
+// Update a booking by ID
+router.put(
+  '/:id',
+  validateBookingUpdate,
+  handleValidationErrors,
+  BookingsController.updateBooking
+);
+
+// Get all bookings
+router.get('/', BookingsController.getAllBookings);
+
+// Get a booking by ID
+router.get('/:id', BookingsController.getBookingById);
+
+// Delete a booking by ID
+router.delete('/:id', BookingsController.deleteBooking);
 
 module.exports = router;

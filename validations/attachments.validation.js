@@ -15,8 +15,6 @@ const handleValidationErrors = (req, res, next) => {
     const errorMessages = errors.array().map((error) => error.msg);
     return res.status(400).json({ errors: errorMessages });
   }
-
-  next();
 };
 
 module.exports = {

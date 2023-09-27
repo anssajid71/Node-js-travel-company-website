@@ -1,19 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/user.controller');
-const { verifyToken } = require('../middlewares/auth');
-const { createUser } = require('../controllers/user.controller');
 const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+const {
+  validateUserRegistration,
+  validateUserLogin,
+  handleValidationErrors,
+} = require('../validations/user.validation'); // Import user validations
 
-const { User } = require('../models/User.model');
-router.post('/create', createUser);
-router.post('/', UserController.createUser);
+// Create a new user
+router.post(
+  '/create',
+  validateUserRegistration,
+  handleValidationErrors,
+  UserController.createUser
+);
+
+// Update a user by ID
 router.put('/:id', UserController.updateUser);
 
+// Get a user by ID
 router.get('/:id', UserController.getUserById);
-router.post('/', UserController.createUser);
-router.put('/:id', UserController.updateUser);
+
+// Delete a user by ID
 router.delete('/:id', UserController.deleteUser);
+
+// Protected route (requires authentication)
 router.get('/protected', jwtAuthMiddleware, (req, res) => {
   // Access the authenticated user using req.user
   const authenticatedUser = req.user;
