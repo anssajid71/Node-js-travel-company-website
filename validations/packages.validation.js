@@ -1,4 +1,3 @@
-// packages.validation.js
 const { check, validationResult } = require('express-validator');
 
 const validatePackageCreation = [

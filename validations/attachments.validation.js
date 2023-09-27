@@ -1,6 +1,5 @@
 const { check, validationResult } = require('express-validator');
 
-// Validation for creating a new attachment
 const validateAttachmentCreation = [
   check('name').notEmpty().withMessage('Name is required'),
   check('attachment_id').notEmpty().withMessage('id is required'),

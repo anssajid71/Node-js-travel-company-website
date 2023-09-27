@@ -30,6 +30,9 @@ simpleDependencies.forEach(function (dependency) {
 
 // Load other modules
 container.load(path.join(__dirname, '/utils'));
+container.load(path.join(__dirname, '/config'));
+container.load(path.join(__dirname, '/migrations'));
+container.load(path.join(__dirname, '/routes'));
 container.load(path.join(__dirname, '/validations'));
 container.load(path.join(__dirname, '/middlewares'));
 container.load(path.join(__dirname, '/controllers'));

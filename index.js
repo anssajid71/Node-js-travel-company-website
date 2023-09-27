@@ -9,7 +9,6 @@ const routes = require('./routes/index');
 const sequelize = require('./database/database');
 const jwtAuthMiddleware = require('./middlewares/jwtAuthMiddleware');
 
-// Generate a random secret key
 const secretKey = crypto.randomBytes(32).toString('hex');
 
 console.log('Generated Secret Key:', secretKey);
@@ -18,7 +17,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan('combined'));
-app.use('/protected', jwtAuthMiddleware); // Add this line
+app.use('/protected', jwtAuthMiddleware);
 
 app.use('/', routes);
 
