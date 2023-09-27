@@ -2,20 +2,28 @@ const { check, validationResult } = require('express-validator');
 
 const validateBookingCreation = [
   check('user_id').notEmpty().withMessage('User ID is required'),
-  check('package_id').notEmpty().withMessage('is required'),
-  check('type').notEmpty().withMessage('is required'),
-  check('total_number_of_persons').notEmpty().withMessage('is required'),
-  check('pickup_location').notEmpty().withMessage('is required'),
-  check('payment_method').notEmpty().withMessage('is required'),
+  check('package_id').notEmpty().withMessage('package_id is required'),
+  check('type').notEmpty().withMessage('type is required'),
+  check('total_number_of_persons')
+    .notEmpty()
+    .withMessage('total_number_of_persons is required'),
+  check('pickup_location')
+    .notEmpty()
+    .withMessage('pickup_location is required'),
+  check('payment_method').notEmpty().withMessage('payment_method is required'),
 ];
 
 const validateBookingUpdate = [
   check('user_id').notEmpty().withMessage('User ID is required'),
-  check('package_id').notEmpty().withMessage('is required'),
-  check('type').notEmpty().withMessage('is required'),
-  check('total_number_of_persons').notEmpty().withMessage('is required'),
-  check('pickup_location').notEmpty().withMessage('is required'),
-  check('payment_method').notEmpty().withMessage('is required'),
+  check('package_id').notEmpty().withMessage('package_id is required'),
+  check('type').notEmpty().withMessage('type is required'),
+  check('total_number_of_persons')
+    .notEmpty()
+    .withMessage('total_number_of_persons is required'),
+  check('pickup_location')
+    .notEmpty()
+    .withMessage('pickup_location is required'),
+  check('payment_method').notEmpty().withMessage('payment_method is required'),
 ];
 
 const handleValidationErrors = (req, res, next) => {
