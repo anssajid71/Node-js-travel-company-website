@@ -1,35 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const HotelsController = require('../controllers/hotels.controller');
+const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createHotel,
+  updateHotel,
+  getAllHotels,
+  getHotelById,
+  deleteHotel,
+} = require('../controllers/hotels.controller');
 const {
   validateHotelCreation,
   validateHotelUpdate,
   handleValidationErrors,
 } = require('../validations/hotels.validation');
 
-// Create a new hotel
 router.post(
   '/',
   validateHotelCreation,
   handleValidationErrors,
-  HotelsController.createHotel
+  jwtAuthMiddleware,
+  createHotel
 );
 
-// Update a hotel by ID
 router.put(
   '/:id',
   validateHotelUpdate,
   handleValidationErrors,
-  HotelsController.updateHotel
+  jwtAuthMiddleware,
+  updateHotel
 );
 
-// Get all hotels
-router.get('/', HotelsController.getAllHotels);
+router.get('/', jwtAuthMiddleware, getAllHotels);
 
-// Get a hotel by ID
-router.get('/:id', HotelsController.getHotelById);
+router.get('/:id', jwtAuthMiddleware, getHotelById);
 
-// Delete a hotel by ID
-router.delete('/:id', HotelsController.deleteHotel);
+router.delete('/:id', jwtAuthMiddleware, deleteHotel);
 
 module.exports = router;

@@ -1,4 +1,3 @@
-// controllers/authController.js (example)
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('./jwt');
 

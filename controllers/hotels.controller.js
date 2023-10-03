@@ -1,84 +1,73 @@
-const { Hotels } = require('../models/Hotels.model');
-const {
-  validateHotelCreation,
-  validateHotelUpdate,
-  handleValidationErrors,
-} = require('../validations/hotels.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { HotelsService } = require('../services/index');
 
-// Create a new hotel
-exports.createHotel = async (req, res) => {
-  // Apply validation middleware
-  validateHotelCreation.forEach((validation) => validation(req, res, () => {}));
-  handleValidationErrors(req, res);
-
+const createHotel = async (req, res) => {
   try {
-    const newHotel = await Hotels.create(req.body);
-    res.status(201).json(newHotel);
+    const newHotel = await HotelsService.createHotel(req.body);
+    res.status(201).json({ message: 'Hotel created successfully', newHotel });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create hotel' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing hotel by ID
-exports.updateHotel = async (req, res) => {
-  const hotelId = req.params.id;
-  // Apply validation middleware
-  validateHotelUpdate.forEach((validation) => validation(req, res, () => {}));
-  handleValidationErrors(req, res);
-
+const updateHotel = async (req, res) => {
   try {
-    const hotel = await Hotels.findByPk(hotelId);
-
-    if (!hotel) {
-      return res.status(404).json({ error: 'Hotel not found' });
-    }
-
-    await hotel.update(req.body);
-    res.status(200).json(hotel);
+    const { id } = req.params;
+    const updatedHotel = await HotelsService.updateHotel(id, req.body);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Hotel updated successfully', updatedHotel });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update hotel' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all hotels
-exports.getAllHotels = async (req, res) => {
+const getAllHotels = async (req, res) => {
   try {
-    const hotels = await Hotels.findAll();
-    res.status(200).json(hotels);
+    const hotels = await HotelsService.getAllHotels();
+    res.status(SUCCESS_CODE).json({ hotels });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get a hotel by ID
-exports.getHotelById = async (req, res) => {
-  const hotelId = req.params.id;
+const getHotelById = async (req, res) => {
   try {
-    const hotel = await Hotels.findByPk(hotelId);
-
-    if (!hotel) {
-      return res.status(404).json({ error: 'Hotel not found' });
-    }
-
-    res.status(200).json(hotel);
+    const { id } = req.params;
+    const hotel = await HotelsService.getHotelById(id);
+    res.status(SUCCESS_CODE).json({ hotel });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete a hotel by ID
-exports.deleteHotel = async (req, res) => {
-  const hotelId = req.params.id;
+const deleteHotel = async (req, res) => {
   try {
-    const hotel = await Hotels.findByPk(hotelId);
-
-    if (!hotel) {
-      return res.status(404).json({ error: 'Hotel not found' });
-    }
-
-    await hotel.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await HotelsService.deleteHotel(id);
+    res.status(SUCCESS_CODE).json({ message: 'Hotel deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createHotel,
+  updateHotel,
+  getAllHotels,
+  getHotelById,
+  deleteHotel,
 };

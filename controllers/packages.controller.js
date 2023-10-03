@@ -1,86 +1,75 @@
-const { Packages } = require('../models/Packages.model');
-const {
-  validatePackageCreation,
-  validatePackageUpdate,
-  handleValidationErrors,
-} = require('../validations/packages.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { PackagesService } = require('../services/index');
 
-// Create a new package
-exports.createPackage = async (req, res) => {
-  // Apply validation middleware
-  validatePackageCreation.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
-
+const createPackage = async (req, res) => {
   try {
-    const newPackage = await Packages.create(req.body);
-    res.status(201).json(newPackage);
+    const newPackage = await PackagesService.createPackage(req.body);
+    res
+      .status(201)
+      .json({ message: 'Package created successfully', newPackage });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create package' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing package by ID
-exports.updatePackage = async (req, res) => {
-  const packageId = req.params.id;
-  // Apply validation middleware
-  validatePackageUpdate.forEach((validation) => validation(req, res, () => {}));
-  handleValidationErrors(req, res);
-
+const updatePackage = async (req, res) => {
   try {
-    const package = await Packages.findByPk(packageId);
-
-    if (!package) {
-      return res.status(404).json({ error: 'Package not found' });
-    }
-
-    await package.update(req.body);
-    res.status(200).json(package);
+    const { id } = req.params;
+    const updatedPackage = await PackagesService.updatePackage(id, req.body);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Package updated successfully', updatedPackage });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update package' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all packages
-exports.getAllPackages = async (req, res) => {
+const getAllPackages = async (req, res) => {
   try {
-    const packages = await Packages.findAll();
-    res.status(200).json(packages);
+    const packages = await PackagesService.getAllPackages();
+    res.status(SUCCESS_CODE).json({ packages });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get a package by ID
-exports.getPackageById = async (req, res) => {
-  const packageId = req.params.id;
+const getPackageById = async (req, res) => {
   try {
-    const package = await Packages.findByPk(packageId);
-
-    if (!package) {
-      return res.status(404).json({ error: 'Package not found' });
-    }
-
-    res.status(200).json(package);
+    const { id } = req.params;
+    const package = await PackagesService.getPackageById(id);
+    res.status(SUCCESS_CODE).json({ package });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete a package by ID
-exports.deletePackage = async (req, res) => {
-  const packageId = req.params.id;
+const deletePackage = async (req, res) => {
   try {
-    const package = await Packages.findByPk(packageId);
-
-    if (!package) {
-      return res.status(404).json({ error: 'Package not found' });
-    }
-
-    await package.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await PackagesService.deletePackage(id);
+    res.status(SUCCESS_CODE).json({ message: 'Package deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createPackage,
+  updatePackage,
+  getAllPackages,
+  getPackageById,
+  deletePackage,
 };

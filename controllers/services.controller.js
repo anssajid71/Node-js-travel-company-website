@@ -1,88 +1,76 @@
-const { Services } = require('../models/Services.model');
-const {
-  createServiceValidation,
-  updateServiceValidation,
-  handleValidationErrors,
-} = require('../validations/services.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { ServicesService } = require('../services/index');
 
-// Create a new service
-exports.createService = async (req, res) => {
+const createService = async (req, res) => {
   try {
-    // Apply validation middleware
-    createServiceValidation.forEach((validation) =>
-      validation(req, res, () => {})
-    );
-    handleValidationErrors(req, res);
-
-    const newService = await Services.create(req.body);
-    res.status(201).json(newService);
+    const newService = await ServicesService.createService(req.body);
+    const token = generateToken(newUser);
+    res
+      .status(201)
+      .json({ message: 'Service created successfully', newService });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create service' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing service by ID
-exports.updateService = async (req, res) => {
-  const serviceId = req.params.id;
+const updateService = async (req, res) => {
   try {
-    // Apply validation middleware
-    updateServiceValidation.forEach((validation) =>
-      validation(req, res, () => {})
-    );
-    handleValidationErrors(req, res);
-
-    const service = await Services.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ error: 'Service not found' });
-    }
-
-    await service.update(req.body);
-    res.status(200).json(service);
+    const { id } = req.params;
+    const updatedService = await ServicesService.updateService(id, req.body);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Service updated successfully', updatedService });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update service' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all services
-exports.getAllServices = async (req, res) => {
+const getAllServices = async (req, res) => {
   try {
-    const services = await Services.findAll();
-    res.status(200).json(services);
+    const services = await ServicesService.getAllServices();
+    res.status(SUCCESS_CODE).json({ services });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get a service by ID
-exports.getServiceById = async (req, res) => {
-  const serviceId = req.params.id;
+const getServiceById = async (req, res) => {
   try {
-    const service = await Services.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ error: 'Service not found' });
-    }
-
-    res.status(200).json(service);
+    const { id } = req.params;
+    const service = await ServicesService.getServiceById(id);
+    res.status(SUCCESS_CODE).json({ service });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete a service by ID
-exports.deleteService = async (req, res) => {
-  const serviceId = req.params.id;
+const deleteService = async (req, res) => {
   try {
-    const service = await Services.findByPk(serviceId);
-
-    if (!service) {
-      return res.status(404).json({ error: 'Service not found' });
-    }
-
-    await service.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await ServicesService.deleteService(id);
+    res.status(SUCCESS_CODE).json({ message: 'Service deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createService,
+  updateService,
+  getAllServices,
+  getServiceById,
+  deleteService,
 };

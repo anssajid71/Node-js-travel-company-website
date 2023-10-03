@@ -5,7 +5,7 @@ const { jwtSecret } = require('../middlewares/env');
 function generateToken(user) {
   const payload = {
     id: 123,
-    email: anysample,
+    email: user.email,
   };
 
   const options = {

@@ -1,35 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/user.controller');
 const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserById,
+} = require('../controllers/user.controller');
 const {
   validateUserRegistration,
   validateUserLogin,
   handleValidationErrors,
-} = require('../validations/user.validation'); // Import user validations
+} = require('../validations/user.validation');
 
-// Create a new user
 router.post(
-  '/create',
+  '/',
+  validateUserLogin,
   validateUserRegistration,
   handleValidationErrors,
-  UserController.createUser
+  jwtAuthMiddleware,
+  createUser
 );
 
-// Update a user by ID
-router.put('/:id', UserController.updateUser);
+router.put('/:id', jwtAuthMiddleware, updateUser);
 
-// Get a user by ID
-router.get('/:id', UserController.getUserById);
+router.get('/:id', jwtAuthMiddleware, getUserById);
 
-// Delete a user by ID
-router.delete('/:id', UserController.deleteUser);
-
-// Protected route (requires authentication)
-router.get('/protected', jwtAuthMiddleware, (req, res) => {
-  // Access the authenticated user using req.user
-  const authenticatedUser = req.user;
-  res.json({ message: 'Access granted', user: authenticatedUser });
-});
+router.delete('/:id', jwtAuthMiddleware, deleteUser);
 
 module.exports = router;

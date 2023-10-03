@@ -1,86 +1,75 @@
-const { Booking } = require('../models/Booking.model');
-const {
-  validateBookingCreation,
-  validateBookingUpdate,
-  handleValidationErrors,
-} = require('../validations/booking.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { BookingService } = require('../services/index');
 
-// Create a new booking
-exports.createBooking = async (req, res) => {
-  // Apply validation middleware
-  validateBookingCreation.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
-
+const createBooking = async (req, res) => {
   try {
-    const newBooking = await Booking.create(req.body);
-    res.status(201).json(newBooking);
+    const newBooking = await BookingService.createBooking(req.body);
+    res
+      .status(201)
+      .json({ message: 'Booking created successfully', newBooking });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create booking' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing booking by ID
-exports.updateBooking = async (req, res) => {
-  const bookingId = req.params.id;
-  // Apply validation middleware
-  validateBookingUpdate.forEach((validation) => validation(req, res, () => {}));
-  handleValidationErrors(req, res);
-
+const updateBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByPk(bookingId);
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found' });
-    }
-
-    await booking.update(req.body);
-    res.status(200).json(booking);
+    const { id } = req.params;
+    const updatedBooking = await BookingService.updateBooking(id, req.body);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Booking updated successfully', updatedBooking });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update booking' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all bookings
-exports.getAllBookings = async (req, res) => {
+const getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.findAll();
-    res.status(200).json(bookings);
+    const bookings = await BookingService.getAllBookings();
+    res.status(SUCCESS_CODE).json({ bookings });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get a booking by ID
-exports.getBookingById = async (req, res) => {
-  const bookingId = req.params.id;
+const getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findByPk(bookingId);
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found' });
-    }
-
-    res.status(200).json(booking);
+    const { id } = req.params;
+    const booking = await BookingService.getBookingById(id);
+    res.status(SUCCESS_CODE).json({ booking });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete a booking by ID
-exports.deleteBooking = async (req, res) => {
-  const bookingId = req.params.id;
+const deleteBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByPk(bookingId);
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found' });
-    }
-
-    await booking.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await BookingService.deleteBooking(id);
+    res.status(SUCCESS_CODE).json({ message: 'Booking deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createBooking,
+  updateBooking,
+  getAllBookings,
+  getBookingById,
+  deleteBooking,
 };

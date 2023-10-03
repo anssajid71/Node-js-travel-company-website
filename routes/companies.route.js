@@ -1,35 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const CompaniesController = require('../controllers/companies.controller');
+const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createCompany,
+  updateCompany,
+  getAllCompanies,
+  getCompanyById,
+  deleteCompany,
+} = require('../controllers/companies.controller');
 const {
   validateCompanyCreation,
   validateCompanyUpdate,
   handleValidationErrors,
 } = require('../validations/companies.validation');
 
-// Create a new company
 router.post(
   '/',
   validateCompanyCreation,
   handleValidationErrors,
-  CompaniesController.createCompany
+  jwtAuthMiddleware,
+  createCompany
 );
 
-// Update a company by ID
 router.put(
   '/:id',
   validateCompanyUpdate,
   handleValidationErrors,
-  CompaniesController.updateCompany
+  jwtAuthMiddleware,
+  updateCompany
 );
 
-// Get all companies
-router.get('/', CompaniesController.getAllCompanies);
+router.get('/', jwtAuthMiddleware, getAllCompanies);
 
-// Get a company by ID
-router.get('/:id', CompaniesController.getCompanyById);
+router.get('/:id', jwtAuthMiddleware, getCompanyById);
 
-// Delete a company by ID
-router.delete('/:id', CompaniesController.deleteCompany);
+router.delete('/:id', jwtAuthMiddleware, deleteCompany);
 
 module.exports = router;

@@ -1,12 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
 const http = require('http');
 const crypto = require('crypto');
-const { Client } = require('pg');
 const routes = require('./routes/index');
-const sequelize = require('./database/database');
+const Client = require('./database/database');
 const jwtAuthMiddleware = require('./middlewares/jwtAuthMiddleware');
 
 const secretKey = crypto.randomBytes(32).toString('hex');
@@ -16,8 +14,6 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(morgan('combined'));
-app.use('/protected', jwtAuthMiddleware);
 
 app.use('/', routes);
 

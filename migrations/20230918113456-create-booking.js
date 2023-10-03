@@ -38,7 +38,7 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('Individual', 'Group'),
         role: {
-          type: DataTypes.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
+          type: DataTypes.ENUM('Client', 'Admin', 'Staff'),
           allowNull: false,
         },
       },

@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const ServicesController = require('../controllers/services.controller');
+const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createService,
+  updateService,
+  getAllServices,
+  getServiceById,
+  deleteService,
+} = require('../controllers/services.controller');
 const {
   createServiceValidation,
   updateServiceValidation,
@@ -11,18 +19,20 @@ router.post(
   '/',
   createServiceValidation,
   handleValidationErrors,
-  ServicesController.createService
+  jwtAuthMiddleware,
+  createService
 );
 router.put(
   '/:id',
   updateServiceValidation,
   handleValidationErrors,
-  ServicesController.updateService
+  jwtAuthMiddleware,
+  updateService
 );
 
-router.get('/', ServicesController.getAllServices);
-router.get('/:id', ServicesController.getServiceById);
+router.get('/', jwtAuthMiddleware, getAllServices);
+router.get('/:id', jwtAuthMiddleware, getServiceById);
 
-router.delete('/:id', ServicesController.deleteService);
+router.delete('/:id', jwtAuthMiddleware, deleteService);
 
 module.exports = router;

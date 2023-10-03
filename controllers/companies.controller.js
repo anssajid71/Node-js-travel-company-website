@@ -1,86 +1,75 @@
-const { Companies } = require('../models/Companies.model');
-const {
-  validateCompanyCreation,
-  validateCompanyUpdate,
-  handleValidationErrors,
-} = require('../validations/companies.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { CompaniesService } = require('../services/index');
 
-// Create a new company
-exports.createCompany = async (req, res) => {
-  // Apply validation middleware
-  validateCompanyCreation.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
-
+const createCompany = async (req, res) => {
   try {
-    const newCompany = await Companies.create(req.body);
-    res.status(201).json(newCompany);
+    const newCompany = await CompaniesService.createCompany(req.body);
+    res
+      .status(201)
+      .json({ message: 'Company created successfully', newCompany });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create company' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing company by ID
-exports.updateCompany = async (req, res) => {
-  const companyId = req.params.id;
-  // Apply validation middleware
-  validateCompanyUpdate.forEach((validation) => validation(req, res, () => {}));
-  handleValidationErrors(req, res);
-
+const updateCompany = async (req, res) => {
   try {
-    const company = await Companies.findByPk(companyId);
-
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
-    }
-
-    await company.update(req.body);
-    res.status(200).json(company);
+    const { id } = req.params;
+    const updatedCompany = await CompaniesService.updateCompany(id, req.body);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Company updated successfully', updatedCompany });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update company' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all companies
-exports.getAllCompanies = async (req, res) => {
+const getAllCompanies = async (req, res) => {
   try {
-    const companies = await Companies.findAll();
-    res.status(200).json(companies);
+    const companies = await CompaniesService.getAllCompanies();
+    res.status(SUCCESS_CODE).json({ companies });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get a company by ID
-exports.getCompanyById = async (req, res) => {
-  const companyId = req.params.id;
+const getCompanyById = async (req, res) => {
   try {
-    const company = await Companies.findByPk(companyId);
-
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
-    }
-
-    res.status(200).json(company);
+    const { id } = req.params;
+    const company = await CompaniesService.getCompanyById(id);
+    res.status(SUCCESS_CODE).json({ company });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete a company by ID
-exports.deleteCompany = async (req, res) => {
-  const companyId = req.params.id;
+const deleteCompany = async (req, res) => {
   try {
-    const company = await Companies.findByPk(companyId);
-
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
-    }
-
-    await company.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await CompaniesService.deleteCompany(id);
+    res.status(SUCCESS_CODE).json({ message: 'Company deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createCompany,
+  updateCompany,
+  getAllCompanies,
+  getCompanyById,
+  deleteCompany,
 };

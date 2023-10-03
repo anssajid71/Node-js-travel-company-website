@@ -3,9 +3,9 @@ const PackagesController = require('./packages.controller');
 const CompaniesController = require('./companies.controller');
 const HotelsController = require('./hotels.controller');
 const BookingController = require('./booking.controller');
-const AttachmentController = require('./attachment.controller');
 const ServicesController = require('./services.controller');
-const AttachmentController = require('../../controllers/attachment.controller');
+const AttachmentController = require('./attachments.controller');
+const AuthController = require('./authcontroller');
 
 module.exports = {
   UserController,
@@ -15,4 +15,5 @@ module.exports = {
   BookingController,
   AttachmentController,
   ServicesController,
+  AuthController,
 };

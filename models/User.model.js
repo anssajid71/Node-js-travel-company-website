@@ -64,11 +64,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
-        allowNull: false, // Role is required
+        allowNull: false,
         validate: {
           isIn: {
-            args: [['admin', 'user']], // Define the allowed values for 'role'
-            msg: 'Invalid role', // Error message for validation failure
+            args: [['admin', 'user']],
+            msg: 'Invalid role',
           },
         },
       },
@@ -76,8 +76,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'User',
+      timestamps: true,
     }
   );
 
-  return User;
+  module.exports = User;
 };

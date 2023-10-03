@@ -1,35 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const BookingsController = require('../controllers/booking.controller');
+const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createBooking,
+  updateBooking,
+  getAllBookings,
+  getBookingById,
+  deleteBooking,
+} = require('../controllers/booking.controller');
 const {
   validateBookingCreation,
   validateBookingUpdate,
   handleValidationErrors,
 } = require('../validations/booking.validation');
 
-// Create a new booking
 router.post(
   '/',
   validateBookingCreation,
   handleValidationErrors,
-  BookingsController.createBooking
+  jwtAuthMiddleware,
+  createBooking
 );
 
-// Update a booking by ID
 router.put(
   '/:id',
   validateBookingUpdate,
   handleValidationErrors,
-  BookingsController.updateBooking
+  jwtAuthMiddleware,
+  updateBooking
 );
 
-// Get all bookings
-router.get('/', BookingsController.getAllBookings);
+router.get('/', jwtAuthMiddleware, getAllBookings);
 
-// Get a booking by ID
-router.get('/:id', BookingsController.getBookingById);
+router.get('/:id', jwtAuthMiddleware, getBookingById);
 
-// Delete a booking by ID
-router.delete('/:id', BookingsController.deleteBooking);
+router.delete('/:id', jwtAuthMiddleware, deleteBooking);
 
 module.exports = router;

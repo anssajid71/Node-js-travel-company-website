@@ -1,88 +1,80 @@
-const { Attachment } = require('../models/Attachments.model');
-const {
-  validateAttachmentCreation,
-  validateAttachmentUpdate,
-  handleValidationErrors,
-} = require('../validations/attachments.validation');
+const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
+const { AttachmentService } = require('../services/index');
 
-// Create a new attachment
-exports.createAttachment = async (req, res) => {
-  // Apply validation middleware
-  validateAttachmentCreation.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
-
+const createAttachment = async (req, res) => {
   try {
-    const newAttachment = await Attachment.create(req.body);
-    res.status(201).json(newAttachment);
+    const newAttachment = await AttachmentService.createAttachment(req.body);
+    res
+      .status(201)
+      .json({ message: 'Attachment created successfully', newAttachment });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to create attachment' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing attachment by ID
-exports.updateAttachment = async (req, res) => {
-  const attachmentId = req.params.id;
-  // Apply validation middleware
-  validateAttachmentUpdate.forEach((validation) =>
-    validation(req, res, () => {})
-  );
-  handleValidationErrors(req, res);
-
+const updateAttachment = async (req, res) => {
   try {
-    const attachment = await Attachment.findByPk(attachmentId);
-
-    if (!attachment) {
-      return res.status(404).json({ error: 'Attachment not found' });
-    }
-
-    await attachment.update(req.body);
-    res.status(200).json(attachment);
+    const { id } = req.params;
+    const updatedAttachment = await AttachmentService.updateAttachment(
+      id,
+      req.body
+    );
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Attachment updated successfully', updatedAttachment });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update attachment' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get all attachments
-exports.getAllAttachments = async (req, res) => {
+const getAllAttachments = async (req, res) => {
   try {
-    const attachments = await Attachment.findAll();
-    res.status(200).json(attachments);
+    const attachments = await AttachmentService.getAllAttachments();
+    res.status(SUCCESS_CODE).json({ attachments });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Get an attachment by ID
-exports.getAttachmentById = async (req, res) => {
-  const attachmentId = req.params.id;
+const getAttachmentById = async (req, res) => {
   try {
-    const attachment = await Attachment.findByPk(attachmentId);
-
-    if (!attachment) {
-      return res.status(404).json({ error: 'Attachment not found' });
-    }
-
-    res.status(200).json(attachment);
+    const { id } = req.params;
+    const attachment = await AttachmentService.getAttachmentById(id);
+    res.status(SUCCESS_CODE).json({ attachment });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
 };
 
-// Delete an attachment by ID
-exports.deleteAttachment = async (req, res) => {
-  const attachmentId = req.params.id;
+const deleteAttachment = async (req, res) => {
   try {
-    const attachment = await Attachment.findByPk(attachmentId);
-
-    if (!attachment) {
-      return res.status(404).json({ error: 'Attachment not found' });
-    }
-
-    await attachment.destroy();
-    res.status(204).send(); // No content
+    const { id } = req.params;
+    await AttachmentService.deleteAttachment(id);
+    res
+      .status(SUCCESS_CODE)
+      .json({ message: 'Attachment deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
   }
+};
+
+module.exports = {
+  createAttachment,
+  updateAttachment,
+  getAllAttachments,
+  getAttachmentById,
+  deleteAttachment,
 };

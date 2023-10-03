@@ -1,28 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const PackagesController = require('../controllers/packages.controller');
+const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
+
+const {
+  createPackage,
+  updatePackage,
+  getAllPackages,
+  getPackageById,
+  deletePackage,
+} = require('../controllers/packages.controller');
 const {
   validatePackageCreation,
   validatePackageUpdate,
   handleValidationErrors,
-} = require('../validations/packages.validation'); // Import package validations
+} = require('../validations/packages.validation');
 
 router.post(
   '/',
   validatePackageCreation,
   handleValidationErrors,
-  PackagesController.createPackage
+  jwtAuthMiddleware,
+  createPackage
 );
 router.put(
   '/:id',
   validatePackageUpdate,
   handleValidationErrors,
-  PackagesController.updatePackage
+  updatePackage
 );
 
-router.get('/', PackagesController.getAllPackages);
-router.get('/:id', PackagesController.getPackageById);
+router.get('/', jwtAuthMiddleware, getAllPackages);
+router.get('/:id', jwtAuthMiddleware, getPackageById);
 
-router.delete('/:id', PackagesController.deletePackage);
+router.delete('/:id', jwtAuthMiddleware, deletePackage);
 
 module.exports = router;
