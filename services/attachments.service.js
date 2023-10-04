@@ -1,4 +1,4 @@
-const { Attachment } = require('../models/Attachments.model');
+const { Attachment } = require('../models/attachments');
 
 // Function to create a new attachment
 const createAttachment = async (attachmentData) => {

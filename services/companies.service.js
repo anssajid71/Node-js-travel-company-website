@@ -1,4 +1,4 @@
-const Company = require('../models/Companies.model');
+const Company = require('../models/companies');
 const { ROLE } = require('../constants/index');
 
 const getCompanies = async (req) => {

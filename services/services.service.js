@@ -1,4 +1,4 @@
-const Service = require('../models/Services.model');
+const Service = require('../models/services');
 const { ROLE } = require('../constants/index');
 
 // Function to create a new service

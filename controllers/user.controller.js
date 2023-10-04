@@ -1,6 +1,6 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { UserService } = require('../services/index');
-
+const { generateToken } = require('../config/generatetoken');
 const createUser = async (req, res) => {
   try {
     const newUser = await UserService.createUser(req.body);
@@ -106,5 +106,5 @@ module.exports = {
   deleteUser,
   getUserById,
   index,
-  updateStatus,
+  // updateStatus,
 };

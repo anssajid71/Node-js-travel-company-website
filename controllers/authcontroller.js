@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('./jwt');
 
-// ...
-
-// Authenticate user (replace with your authentication logic)
 const user = await User.findOne({ email });
 
 if (!user || user.password !== password) {

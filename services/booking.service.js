@@ -1,4 +1,4 @@
-const Booking = require('../models/Booking.model');
+const Booking = require('../models/booking');
 const { ROLE } = require('../constants/index');
 
 const getBookings = async (req) => {

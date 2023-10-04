@@ -1,25 +1,26 @@
 {
   "development": {
   "host": "localhost",
-  "user":"newUser",
-  "password" :"password",
+  "user":"travel",
+  "password" :"mypassword",
   "port":"5432",
   "dialect": "postgres",
-  "database": "muhammadans"
-
+  "database": "travel"
   },
   "test": {
     "host": "localhost",
-    "user":"newUser",
-    "password" :"password",
+    "user":"travel",
+    "password" :"mypassword",
     "port":"5432",
-    "dialect": "postgres"
-  },
-  "production": {
-    "host": "localhost",
-    "user":"newUser",
-    "password" :"password",
-    "port":"5432",
-    "dialect": "postgres"
-  }
+    "dialect": "postgres",
+    "database": "travel"
+    },
+    "production": {
+      "host": "localhost",
+      "user":"travel",
+      "password" :"mypassword",
+      "port":"5432",
+      "dialect": "postgres",
+      "database": "travel"
+    }
 }

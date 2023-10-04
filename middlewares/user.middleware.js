@@ -1,5 +1,5 @@
 const { ERROR_CODES, ERROR_MESSAGES } = require('../../constants');
-const User = require('../../models/User.model');
+const User = require('../../models/User').User;
 
 const deleteAdminValidation = async (req, res, next) => {
   let { adminEmail } = req.body;

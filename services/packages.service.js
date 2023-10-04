@@ -1,4 +1,4 @@
-const Package = require('../models/Packages.model');
+const Package = require('../models/packages');
 const { ROLE } = require('../constants/index');
 
 const getPackages = async (req) => {

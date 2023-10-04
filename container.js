@@ -12,13 +12,13 @@ const simpleDependencies = [
   ['moment', 'moment'],
 
   // Required Models
-  ['User', './models/user-model'],
-  ['Services', './models/Services-model'],
-  ['Packages', './models/Packages-model'],
-  ['Hotels', './models/Hotels-model'],
-  ['Companies', './models/Companies-model'],
-  ['Booking', './models/Booking-model'],
-  ['Attachments', './models/Attachments-model'],
+  ['User', './models/user'],
+  ['Services', './models/services'],
+  ['Packages', './models/packages'],
+  ['Hotels', './models/hotels'],
+  ['Companies', './models/companies'],
+  ['Booking', './models/booking'],
+  ['Attachments', './models/attachments'],
 ];
 
 // Register dependencies

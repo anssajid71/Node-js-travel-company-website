@@ -16,10 +16,10 @@ const {
 
 router.post(
   '/',
-  validateUserLogin,
-  validateUserRegistration,
-  handleValidationErrors,
-  jwtAuthMiddleware,
+  // validateUserLogin,
+  // validateUserRegistration,
+  // handleValidationErrors,
+  // jwtAuthMiddleware,
   createUser
 );
 

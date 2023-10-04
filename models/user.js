@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      retype_password: {
+      retype_pasword: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -80,5 +80,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  module.exports = User;
+  return User;
 };

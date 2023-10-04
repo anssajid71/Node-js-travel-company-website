@@ -6,7 +6,7 @@ const validateUserRegistration = [
   check('password')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long'),
-  check('retype_password').custom((value, { req }) => {
+  check('retype_pasword').custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error('Retyped password does not match');
     }

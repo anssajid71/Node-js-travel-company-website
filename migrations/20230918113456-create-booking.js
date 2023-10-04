@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.ENUM('Individual', 'Group'), // Define allowed values
         allowNull: false, // Adjust allowNull based on your requirements
         role: {
-          type: DataTypes.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
+          type: Sequelize.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
           allowNull: false,
         },
       },
@@ -38,7 +38,7 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('Individual', 'Group'),
         role: {
-          type: DataTypes.ENUM('Client', 'Admin', 'Staff'),
+          type: Sequelize.ENUM('Client', 'Admin', 'Staff'),
           allowNull: false,
         },
       },

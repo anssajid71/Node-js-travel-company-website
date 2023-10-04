@@ -1,10 +1,13 @@
 const { Client } = require('pg');
+const pgp = require('pg-promise')();
+const db = pgp('postgres');
 
 const dbConfig = {
-  user: 'newUser',
+  user: 'newuser',
   password: 'password',
-  database: 'muhammadans',
+  database: 'postgres',
   host: 'localhost',
+  dialect: 'postgres',
   port: 5432,
 };
 

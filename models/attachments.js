@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'hotels',
       });
-      Attachments.belongsTo(models.packages, {
-        foreignKey: 'attachment_id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        targetKey: 'id',
-        as: 'packages',
-      });
+      // Attachments.belongsTo(models.packages, {
+      //   foreignKey: 'attachment_id',
+      //   onDelete: 'CASCADE',
+      //   onUpdate: 'CASCADE',
+      //   targetKey: 'id',
+      //   as: 'packages',
+      // });
     }
   }
   Attachments.init(

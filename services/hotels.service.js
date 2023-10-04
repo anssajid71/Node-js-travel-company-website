@@ -1,4 +1,4 @@
-const Hotel = require('../models/Hotels.model');
+const Hotel = require('../models/hotels');
 const { ROLE } = require('../constants/index');
 
 const getHotels = async (req) => {
