@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Companies.associate = (models) => {
         Companies.belongsTo(models.User, {
-          foreignKey: 'user_id',
+          primarykey: 'user_id',
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE',
           targetKey: 'id',
@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       logo: DataTypes.STRING,
       phone_number: DataTypes.STRING,
+      payment_status: DataTypes.STRING,
     },
     {
       sequelize,

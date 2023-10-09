@@ -1,13 +1,25 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { UserService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+
+const getAllUser = async (req, res) => {
+  try {
+    const newUser = await UserService.getAllUser();
+    res.status(201).json({ message: 'Get all user successfully', newUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 const createUser = async (req, res) => {
   try {
     const newUser = await UserService.createUser(req.body);
 
     const token = generateToken(newUser);
 
-    res.status(201).json({ message: 'User created successfully', token });
+    res
+      .status(201)
+      .json({ message: 'User created successfully', token, newUser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -56,55 +68,10 @@ const getUserById = async (req, res) => {
   }
 };
 
-const index = async (req, res) => {
-  try {
-    const { users, totalPages } = await UserService.getUsers(req);
-
-    return res.status(SUCCESS_CODE).json({
-      users,
-      totalPages,
-    });
-  } catch (error) {
-    return res.status(ERROR_CODES.BAD_REQUEST).json({
-      error: true,
-      message: error.toString(),
-    });
-  }
-};
-
-const updateStatus = async (req, res) => {
-  try {
-    const { id, status } = req.body;
-    await UserService.updateStatus(id, status);
-
-    const { searchQuery, page_no, limit } = req.body;
-    const currentUserId = req.user._id;
-
-    const { users, totalPages } = await UserService.getPaginatedUsers(
-      searchQuery,
-      page_no,
-      limit,
-      currentUserId
-    );
-
-    return res.status(SUCCESS_CODE).send({
-      message: 'Status updated successfully!',
-      users,
-      totalPages,
-    });
-  } catch (error) {
-    return res.status(ERROR_CODES.BAD_REQUEST).json({
-      error: true,
-      message: error.toString(),
-    });
-  }
-};
-
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUserById,
-  index,
-  // updateStatus,
+  getAllUser,
 };

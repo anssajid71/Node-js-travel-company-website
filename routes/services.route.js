@@ -5,32 +5,28 @@ const jwtAuthMiddleware = require('../middlewares/jwtAuthMiddleware');
 const {
   createService,
   updateService,
-  getAllServices,
-  getServiceById,
   deleteService,
+  getServiceById,
+  getAllServices,
 } = require('../controllers/services.controller');
 const {
-  createServiceValidation,
-  updateServiceValidation,
+  validateServiceCreation,
+  validateServiceUpdate,
   handleValidationErrors,
 } = require('../validations/services.validation');
 
 router.post(
   '/',
-  createServiceValidation,
-  handleValidationErrors,
-  jwtAuthMiddleware,
+  // validateServiceCreation,
+  // handleValidationErrors,
+  // jwtAuthMiddleware,
   createService
 );
-router.put(
-  '/:id',
-  updateServiceValidation,
-  handleValidationErrors,
-  jwtAuthMiddleware,
-  updateService
-);
 
-router.get('/', jwtAuthMiddleware, getAllServices);
+router.get('/getall', jwtAuthMiddleware, getAllServices);
+
+router.put('/:id', jwtAuthMiddleware, updateService);
+
 router.get('/:id', jwtAuthMiddleware, getServiceById);
 
 router.delete('/:id', jwtAuthMiddleware, deleteService);

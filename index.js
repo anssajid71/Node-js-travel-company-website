@@ -4,8 +4,7 @@ const cookieParser = require('cookie-parser');
 const http = require('http');
 const crypto = require('crypto');
 const routes = require('./routes/index');
-const Client = require('./database/database');
-const jwtAuthMiddleware = require('./middlewares/jwtAuthMiddleware');
+const Client = require('./config/config');
 
 const secretKey = crypto.randomBytes(32).toString('hex');
 

@@ -17,21 +17,21 @@ const {
 
 router.post(
   '/',
-  validateAttachmentCreation,
-  handleValidationErrors,
-  jwtAuthMiddleware,
+  // validateAttachmentCreation,
+  // handleValidationErrors,
+  // jwtAuthMiddleware,
   createAttachment
 );
 
 router.put(
   '/:id',
-  validateAttachmentUpdate,
-  handleValidationErrors,
-  jwtAuthMiddleware,
+  // validateAttachmentUpdate,
+  // handleValidationErrors,
+  // jwtAuthMiddleware,
   updateAttachment
 );
 
-router.get('/', jwtAuthMiddleware, getAllAttachments);
+router.get('/getall', jwtAuthMiddleware, getAllAttachments);
 
 router.get('/:id', jwtAuthMiddleware, getAttachmentById);
 

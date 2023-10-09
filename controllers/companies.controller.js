@@ -1,12 +1,15 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { CompaniesService } = require('../services/index');
+const { generateToken } = require('../config/generatetoken');
 
 const createCompany = async (req, res) => {
   try {
     const newCompany = await CompaniesService.createCompany(req.body);
+    const token = generateToken(newCompany);
+
     res
       .status(201)
-      .json({ message: 'Company created successfully', newCompany });
+      .json({ message: 'Company created successfully', token, newCompany  });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

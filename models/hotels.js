@@ -1,5 +1,11 @@
 'use strict';
 const { Model } = require('sequelize');
+const Hotels = require('../models');
+
+module.exports = {
+  Hotels,
+  // Add your other models here
+};
 module.exports = (sequelize, DataTypes) => {
   class Hotels extends Model {
     static associate(models) {

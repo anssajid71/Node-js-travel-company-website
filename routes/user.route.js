@@ -7,6 +7,7 @@ const {
   updateUser,
   deleteUser,
   getUserById,
+  getAllUser,
 } = require('../controllers/user.controller');
 const {
   validateUserRegistration,
@@ -16,12 +17,11 @@ const {
 
 router.post(
   '/',
-  // validateUserLogin,
-  // validateUserRegistration,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+
   createUser
 );
+
+router.get('/getall', jwtAuthMiddleware, getAllUser);
 
 router.put('/:id', jwtAuthMiddleware, updateUser);
 

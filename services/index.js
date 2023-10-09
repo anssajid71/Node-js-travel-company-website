@@ -1,17 +1,22 @@
 const UserService = require('./user.service');
-const GenericService = require('./services.service');
+const ServicerService = require('./services.service');
 const PackagesService = require('./packages.service');
 const HotelsService = require('./hotels.service');
 const CompaniesService = require('./companies.service');
 const BookingService = require('./booking.service');
-const AttachmentService = require('./attachments.service');
+const AttachmentsService = require('./attachments.service');
+const ServicesService = require('./services.service'); // Adjust the import path as needed
+const Services = require('./services.service'); // Adjust the path as needed
+
 
 module.exports = {
   UserService,
-  GenericService,
+  ServicerService,
   PackagesService,
   HotelsService,
   CompaniesService,
   BookingService,
-  AttachmentService,
+  AttachmentsService,
+  ServicesService,
+  Services,
 };

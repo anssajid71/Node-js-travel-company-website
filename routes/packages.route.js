@@ -10,26 +10,26 @@ const {
   deletePackage,
 } = require('../controllers/packages.controller');
 const {
-  validatePackageCreation,
-  validatePackageUpdate,
-  handleValidationErrors,
+  // validatePackageCreation,
+  // validatePackageUpdate,
+  // handleValidationErrors,
 } = require('../validations/packages.validation');
 
 router.post(
   '/',
-  validatePackageCreation,
-  handleValidationErrors,
-  jwtAuthMiddleware,
+  // validatePackageCreation,
+  // handleValidationErrors,
+  // jwtAuthMiddleware,
   createPackage
 );
 router.put(
   '/:id',
-  validatePackageUpdate,
-  handleValidationErrors,
+  // validatePackageUpdate,
+  // handleValidationErrors,
   updatePackage
 );
 
-router.get('/', jwtAuthMiddleware, getAllPackages);
+router.get('/getall', jwtAuthMiddleware, getAllPackages);
 router.get('/:id', jwtAuthMiddleware, getPackageById);
 
 router.delete('/:id', jwtAuthMiddleware, deletePackage);

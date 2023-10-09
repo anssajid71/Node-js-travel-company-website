@@ -1,10 +1,15 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { HotelsService } = require('../services/index');
+const { generateToken } = require('../config/generatetoken');
 
 const createHotel = async (req, res) => {
   try {
     const newHotel = await HotelsService.createHotel(req.body);
-    res.status(201).json({ message: 'Hotel created successfully', newHotel });
+    const token = generateToken(newHotel);
+
+    res
+      .status(201)
+      .json({ message: 'Hotel created successfully', token, newHotel });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

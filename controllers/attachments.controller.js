@@ -1,12 +1,19 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
-const { AttachmentService } = require('../services/index');
+const { AttachmentsService } = require('../services/index');
+const { generateToken } = require('../config/generatetoken');
 
 const createAttachment = async (req, res) => {
   try {
-    const newAttachment = await AttachmentService.createAttachment(req.body);
+    const newAttachment = await AttachmentsService.createAttachment(req.body);
+    const token = generateToken(newAttachment);
+
     res
       .status(201)
-      .json({ message: 'Attachment created successfully', newAttachment });
+      .json({
+        message: 'Attachment created successfully',
+        token,
+        newAttachment,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -16,7 +23,7 @@ const createAttachment = async (req, res) => {
 const updateAttachment = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedAttachment = await AttachmentService.updateAttachment(
+    const updatedAttachment = await AttachmentsService.updateAttachment(
       id,
       req.body
     );
@@ -33,7 +40,7 @@ const updateAttachment = async (req, res) => {
 
 const getAllAttachments = async (req, res) => {
   try {
-    const attachments = await AttachmentService.getAllAttachments();
+    const attachments = await AttachmentsService.getAllAttachments();
     res.status(SUCCESS_CODE).json({ attachments });
   } catch (error) {
     console.error(error);
@@ -46,7 +53,7 @@ const getAllAttachments = async (req, res) => {
 const getAttachmentById = async (req, res) => {
   try {
     const { id } = req.params;
-    const attachment = await AttachmentService.getAttachmentById(id);
+    const attachment = await AttachmentsService.getAttachmentById(id);
     res.status(SUCCESS_CODE).json({ attachment });
   } catch (error) {
     console.error(error);
@@ -59,7 +66,7 @@ const getAttachmentById = async (req, res) => {
 const deleteAttachment = async (req, res) => {
   try {
     const { id } = req.params;
-    await AttachmentService.deleteAttachment(id);
+    await AttachmentsService.deleteAttachment(id);
     res
       .status(SUCCESS_CODE)
       .json({ message: 'Attachment deleted successfully' });

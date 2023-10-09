@@ -1,9 +1,9 @@
-const { Attachment } = require('../models/attachments');
+const { Attachments } = require('../models/index');
 
 // Function to create a new attachment
 const createAttachment = async (attachmentData) => {
   try {
-    const newAttachment = await Attachment.create(attachmentData);
+    const newAttachment = await Attachments.create(attachmentData);
     return newAttachment;
   } catch (error) {
     throw error;
@@ -13,11 +13,8 @@ const createAttachment = async (attachmentData) => {
 // Function to update an attachment by ID
 const updateAttachment = async (attachmentId, attachmentData) => {
   try {
-    const updatedAttachment = await Attachment.findByIdAndUpdate(
-      attachmentId,
-      attachmentData,
-      { new: true }
-    );
+    const updatedAttachment = await Attachments.findByPk(attachmentId);
+
     return updatedAttachment;
   } catch (error) {
     throw error;
@@ -27,7 +24,7 @@ const updateAttachment = async (attachmentId, attachmentData) => {
 // Function to get all attachments
 const getAllAttachments = async () => {
   try {
-    const attachments = await Attachment.find();
+    const attachments = await Attachments.findAll();
     return attachments;
   } catch (error) {
     throw error;
@@ -37,7 +34,7 @@ const getAllAttachments = async () => {
 // Function to get an attachment by ID
 const getAttachmentById = async (attachmentId) => {
   try {
-    const attachment = await Attachment.findById(attachmentId);
+    const attachment = await Attachments.findByPk(attachmentId);
     return attachment;
   } catch (error) {
     throw error;
@@ -47,7 +44,12 @@ const getAttachmentById = async (attachmentId) => {
 // Function to delete an attachment by ID
 const deleteAttachment = async (attachmentId) => {
   try {
-    await Attachment.findByIdAndDelete(attachmentId);
+    const rowsDeleted = await Attachments.destroy({
+      where: { id: attachmentId },
+    });
+    if (rowsDeleted === 0) {
+      throw new Error('User not found or no deletions were made.');
+    }
   } catch (error) {
     throw error;
   }

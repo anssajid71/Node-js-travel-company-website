@@ -1,12 +1,15 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { PackagesService } = require('../services/index');
+const { generateToken } = require('../config/generatetoken');
 
 const createPackage = async (req, res) => {
   try {
     const newPackage = await PackagesService.createPackage(req.body);
+    const token = generateToken(newPackage);
+
     res
       .status(201)
-      .json({ message: 'Package created successfully', newPackage });
+      .json({ message: 'Package created successfully', token, newPackage });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

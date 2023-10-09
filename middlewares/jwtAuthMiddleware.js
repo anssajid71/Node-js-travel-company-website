@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../middlewares/env');
+const { jwtSecret } = require('./env');
 
+// eslint-disable-next-line consistent-return
 const jwtAuthMiddleware = (req, res, next) => {
   const header = req.headers.authorization;
 

@@ -7,9 +7,9 @@ const validateBookingCreation = [
   check('total_number_of_persons')
     .notEmpty()
     .withMessage('Total number of persons is required'),
-  check('pickup location')
-    .notEmpty()
-    .withMessage('pickup location is required'),
+  check('pickup location'),
+    // .notEmpty()
+    // .withMessage('pickup location is required'),
   check('payment_method').notEmpty().withMessage('payment method is required'),
 ];
 

@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.ENUM,
         values: ['pending', 'confirmed', 'canceled'],
-        allowNull: false,
+        // allowNull: false,
       },
 
       payment_method: DataTypes.STRING,
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       pymment_status: {
         type: DataTypes.ENUM,
         values: ['pending', 'completed', 'failed'],
-        allowNull: false,
+        // allowNull: false,
       },
 
       payment_date: DataTypes.STRING,
