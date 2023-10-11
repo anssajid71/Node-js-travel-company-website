@@ -20,20 +20,11 @@ const validateSignUpRequest = [
 ];
 
 const validateSignIpRequest = [
-  check('email')
-    .isEmail()
-    .withMessage('Valid Email required')
-    .custom(async (value) => {
-      const existingUser = await User.findOne({ where: { email: value } });
-      if (existingUser) {
-        throw new Error('Email is already in use');
-      }
-      return true;
-    }),
-  check('password')
-    .isLength({ min: 4 })
-    .withMessage('Password must be at least 6 characters long'),
-];
+  check("email").isEmail().withMessage("Valid Email required"),
+  check("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 character long"),
+  ]
 
 const isRequestValidated = (req, res, next) => {
   const errors = validationResult(req);

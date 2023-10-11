@@ -5,26 +5,30 @@ const { generateToken } = require('../config/generatetoken');
 const signInUser = async (email, password) => {
   try {
     const user = await User.findOne({ where: { email } });
+
     if (!user) {
       throw new Error('User not found.');
     }
-    const isPasswordValid = await bcrypt.compare(password, user.hash_password);
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
-      throw new Error('Invalid password.');
+      throw new Error('Incorrect password.');
     }
+
     const token = generateToken(user);
     return { user, token };
   } catch (error) {
     throw error;
   }
-};
+}
+
 
 const createUser = async (userData) => {
   try {
+    
     return await User.create(userData);
-    // return newUser;
   } catch (error) {
-    // console.log('erooro->', error);
     throw error;
   }
 };
@@ -78,6 +82,14 @@ const getAllUser = async () => {
   }
 };
 
+const findUserByEmail = async (email) => {
+  try {
+    return await User.findOne({ where: { email } });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -85,4 +97,5 @@ module.exports = {
   getUserById,
   getAllUser,
   signInUser,
+  findUserByEmail,
 };

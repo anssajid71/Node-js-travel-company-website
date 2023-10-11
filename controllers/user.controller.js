@@ -2,18 +2,37 @@ const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { UserService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
 const { jwtExpiration } = require('../middlewares/env');
+const bcrypt = require('bcrypt');
 
 const signInUser = async (req, res) => {
-  try {
-    const UserDetails = await UserService.createUser(req.body);
+  const { email, password } = req.body;
 
-    const token = generateToken(UserDetails);
+  try {
+    const user = await UserService.findUserByEmail(email);
+
+    if (!user) {
+      return res.status(ERROR_CODES.BAD_REQUEST).json({
+        error: true,
+        message: 'User not found. Please sign up first.',
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(ERROR_CODES.BAD_REQUEST).json({
+        error: true,
+        message: 'Incorrect password.',
+      });
+    }
+
+    const token = generateToken(user);
 
     res.status(201).json({
       message: 'User SignIn successfully',
       token,
       expires_in: jwtExpiration,
-      UserDetails,
+      UserDetails: user,
     });
   } catch (error) {
     console.error(error);
@@ -21,8 +40,7 @@ const signInUser = async (req, res) => {
       .status(ERROR_CODES.BAD_REQUEST)
       .json({ error: true, message: error.toString() });
   }
-};
-
+}
 const getAllUser = async (req, res) => {
   try {
     const newUser = await UserService.getAllUser();
@@ -38,14 +56,12 @@ const createUser = async (req, res) => {
 
     const token = generateToken(newUser);
 
-    res
-      .status(201)
-      .json({
-        message: 'User SignUp successfully',
-        token,
-        expires_in: jwtExpiration,
-        newUser,
-      });
+    res.status(201).json({
+      message: 'User SignUp successfully',
+      token,
+      expires_in: jwtExpiration,
+      newUser,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
