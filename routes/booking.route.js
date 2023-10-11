@@ -10,23 +10,20 @@ const {
   deleteBooking,
 } = require('../controllers/booking.controller');
 const {
-  // validateBookingCreation,
-  // validateBookingUpdate,
-  // handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 } = require('../validations/booking.validation');
 
 router.post(
-  '/',
-  // validateBookingCreation,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+  '/signup',
+  validateSignUpRequest,
+  isRequestValidated,
   createBooking
 );
 
 router.put(
   '/:id',
-  // validateBookingUpdate,
-  // handleValidationErrors,
+  
   jwtAuthMiddleware,
   updateBooking
 );

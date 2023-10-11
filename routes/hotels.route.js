@@ -10,15 +10,14 @@ const {
   deleteHotel,
 } = require('../controllers/hotels.controller');
 const {
-  // validateHotelCreation,
-  // validateHotelUpdate,
-  // handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 } = require('../validations/hotels.validation');
 
 router.post(
-  '/',
-  // validateHotelCreation,
-  // handleValidationErrors,
+  '/signup',
+  validateSignUpRequest,
+  isRequestValidated,
   // jwtAuthMiddleware,
   createHotel
 );

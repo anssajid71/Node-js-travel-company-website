@@ -1,6 +1,7 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { PackagesService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createPackage = async (req, res) => {
   try {
@@ -9,7 +10,12 @@ const createPackage = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'Package created successfully', token, newPackage });
+      .json({
+        message: 'Package created successfully',
+        token,
+        expires_in: jwtExpiration,
+        newPackage,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

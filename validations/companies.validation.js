@@ -1,28 +1,34 @@
 const { check, validationResult } = require('express-validator');
+const { StatusCodes } = require('http-status-codes');
+const { Companies } = require('../models');
 
-const validateCompanyCreation = [
+const validateSignUpRequest = [
   check('name').notEmpty().withMessage('Name is required'),
-  check('user_id').notEmpty().withMessage('User ID is required'),
+  check('user_id')
+  .isNumeric()
+  .withMessage('User id must be a numeric value')
+  .custom(async (value) => {
+    const existingCompanies = await Companies.findOne({ where: { user_id: value } });
+    if (existingCompanies) {
+      throw new Error('User id is already in use');
+    }
+    return true;
+  }),  
   check('phone_number').notEmpty().withMessage('Phone Number is required'),
 ];
 
-const validateCompanyUpdate = [
-  check('name').notEmpty().withMessage('Name is required'),
-  check('user_id').notEmpty().withMessage('user-id is required'),
-  check('phone_number').notEmpty().withMessage('is required'),
-];
-
-const handleValidationErrors = (req, res, next) => {
+const isRequestValidated = (req, res, next) => {
   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map((error) => error.msg);
-    return res.status(400).json({ errors: errorMessages });
+  if (errors.array().length > 0) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: errors.array()[0].msg });
   }
+  next();
 };
 
 module.exports = {
-  validateCompanyCreation,
-  validateCompanyUpdate,
-  handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 };

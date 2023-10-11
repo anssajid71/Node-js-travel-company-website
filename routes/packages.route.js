@@ -10,15 +10,16 @@ const {
   deletePackage,
 } = require('../controllers/packages.controller');
 const {
-  // validatePackageCreation,
+  validateSignUpRequest,
+  isRequestValidated,
   // validatePackageUpdate,
-  // handleValidationErrors,
+  handleValidationErrors,
 } = require('../validations/packages.validation');
 
 router.post(
-  '/',
-  // validatePackageCreation,
-  // handleValidationErrors,
+  '/signup',
+  validateSignUpRequest,
+  isRequestValidated,
   // jwtAuthMiddleware,
   createPackage
 );

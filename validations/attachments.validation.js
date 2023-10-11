@@ -1,23 +1,24 @@
 const { check, validationResult } = require('express-validator');
+const { StatusCodes } = require('http-status-codes');
 
-const validateAttachmentCreation = [
+const validateSignUpRequest = [
   check('name').notEmpty().withMessage('Name is required'),
   check('attachment_id').notEmpty().withMessage('id is required'),
 ];
 
-const validateAttachmentUpdate = [];
 
-const handleValidationErrors = (req, res, next) => {
+const isRequestValidated = (req, res, next) => {
   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map((error) => error.msg);
-    return res.status(400).json({ errors: errorMessages });
+  if (errors.array().length > 0) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: errors.array()[0].msg });
   }
+  next();
 };
 
 module.exports = {
-  validateAttachmentCreation,
-  validateAttachmentUpdate,
-  handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 };

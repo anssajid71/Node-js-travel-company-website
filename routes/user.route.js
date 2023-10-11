@@ -8,18 +8,17 @@ const {
   deleteUser,
   getUserById,
   getAllUser,
+  signInUser,
 } = require('../controllers/user.controller');
 const {
-  validateUserRegistration,
-  validateUserLogin,
-  handleValidationErrors,
-} = require('../validations/user.validation');
+  validateSignUpRequest,
+  validateSignIpRequest,
+  isRequestValidated,
+} = require('../validations/auth');
 
-router.post(
-  '/',
+router.post('/signin', validateSignIpRequest, isRequestValidated, signInUser);
 
-  createUser
-);
+router.post('/signup', validateSignUpRequest, isRequestValidated, createUser);
 
 router.get('/getall', jwtAuthMiddleware, getAllUser);
 

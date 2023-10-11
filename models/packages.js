@@ -33,7 +33,14 @@ module.exports = (sequelize, DataTypes) => {
   Packages.init(
     {
       name: DataTypes.STRING,
-      description: DataTypes.TEXT,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
       price: DataTypes.DECIMAL,
       start_date: DataTypes.DATE,
       end_date: DataTypes.DATE,

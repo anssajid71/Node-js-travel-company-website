@@ -1,12 +1,10 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { ServicerService, Services } = require('../services/index');
-// const { Services } = require('../models/services');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createService = async (req, res) => {
   try {
-    console.log('here inside........');
-
     const newService = await ServicerService.createService(req.body);
 
     const token = generateToken(newService);
@@ -15,7 +13,12 @@ const createService = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'Service created successfully', token, newService });
+      .json({
+        message: 'Service created successfully',
+        token,
+        expires_in: jwtExpiration,
+        newService,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

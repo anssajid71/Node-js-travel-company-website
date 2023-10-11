@@ -10,24 +10,20 @@ const {
   deleteAttachment,
 } = require('../controllers/attachments.controller');
 const {
-  validateAttachmentCreation,
-  validateAttachmentUpdate,
-  handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 } = require('../validations/attachments.validation');
 
 router.post(
-  '/',
-  // validateAttachmentCreation,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+  '/signup',
+  validateSignUpRequest,
+  isRequestValidated,
   createAttachment
 );
 
 router.put(
   '/:id',
-  // validateAttachmentUpdate,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+ 
   updateAttachment
 );
 

@@ -1,6 +1,7 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { CompaniesService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createCompany = async (req, res) => {
   try {
@@ -9,7 +10,12 @@ const createCompany = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'Company created successfully', token, newCompany  });
+      .json({
+        message: 'Company created successfully',
+        token,
+        expires_in: jwtExpiration,
+        newCompany,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

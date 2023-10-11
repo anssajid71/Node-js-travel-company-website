@@ -1,6 +1,7 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { HotelsService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createHotel = async (req, res) => {
   try {
@@ -9,7 +10,12 @@ const createHotel = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'Hotel created successfully', token, newHotel });
+      .json({
+        message: 'Hotel created successfully',
+        token,
+        expires_in: jwtExpiration,
+        newHotel,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

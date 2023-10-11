@@ -10,15 +10,15 @@ const {
   getAllServices,
 } = require('../controllers/services.controller');
 const {
-  validateServiceCreation,
+  createServiceValidation,
   validateServiceUpdate,
   handleValidationErrors,
 } = require('../validations/services.validation');
 
 router.post(
-  '/',
-  // validateServiceCreation,
-  // handleValidationErrors,
+  '/signup',
+  createServiceValidation,
+  handleValidationErrors,
   // jwtAuthMiddleware,
   createService
 );

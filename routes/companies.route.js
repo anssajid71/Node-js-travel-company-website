@@ -10,24 +10,20 @@ const {
   deleteCompany,
 } = require('../controllers/companies.controller');
 const {
-  // validateCompanyCreation,
-  // validateCompanyUpdate,
-  // handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 } = require('../validations/companies.validation');
 
 router.post(
-  '/',
-  // validateCompanyCreation,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+  '/signup',
+  validateSignUpRequest,
+  isRequestValidated,
   createCompany
 );
 
 router.put(
   '/:id',
-  // validateCompanyUpdate,
-  // handleValidationErrors,
-  // jwtAuthMiddleware,
+
   updateCompany
 );
 

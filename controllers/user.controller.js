@@ -1,6 +1,27 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { UserService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
+
+const signInUser = async (req, res) => {
+  try {
+    const UserDetails = await UserService.createUser(req.body);
+
+    const token = generateToken(UserDetails);
+
+    res.status(201).json({
+      message: 'User SignIn successfully',
+      token,
+      expires_in: jwtExpiration,
+      UserDetails,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .json({ error: true, message: error.toString() });
+  }
+};
 
 const getAllUser = async (req, res) => {
   try {
@@ -19,7 +40,12 @@ const createUser = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'User created successfully', token, newUser });
+      .json({
+        message: 'User SignUp successfully',
+        token,
+        expires_in: jwtExpiration,
+        newUser,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -74,4 +100,5 @@ module.exports = {
   deleteUser,
   getUserById,
   getAllUser,
+  signInUser,
 };

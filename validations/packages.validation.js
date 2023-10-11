@@ -1,36 +1,37 @@
 const { check, validationResult } = require('express-validator');
+const { StatusCodes } = require('http-status-codes');
+const { Packages } = require('../models');
 
-const validatePackageCreation = [
-  check('name').notEmpty().withMessage('Package name is required'),
-  check('description')
-    .notEmpty()
-    .withMessage('Package description is required'),
+const validateSignUpRequest = [
+  check('name').notEmpty().withMessage('Name is required'),
+  check('email')
+  .notEmpty()
+  .withMessage('Email is required (info@gmail.com)')
+  .isEmail()
+  .withMessage('Valid email is required (e.g., info@gmail.com)')
+  .custom(async (value) => {
+    const existingPackage = await Packages.findOne({ where: { email: value } });
+    if (existingPackage) {
+      throw new Error('Email is already in use');
+    }
+    return true;
+  }),
   check('price')
-    .isFloat({ min: 0.01 })
-    .withMessage('Price must be a number greater than 0.00'),
+    .isLength({ min: 1 })
+    .withMessage('Price must be at least 1 character long'),
 ];
 
-const validatePackageUpdate = [
-  check('name').notEmpty().withMessage('Package name is required'),
-  check('description')
-    .notEmpty()
-    .withMessage('Package description is required'),
-  check('price')
-    .isFloat({ min: 0.01 })
-    .withMessage('Price must be a number greater than 0.00'),
-];
-
-const handleValidationErrors = (req, res, next) => {
+const isRequestValidated = (req, res, next) => {
   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map((error) => error.msg);
-    return res.status(400).json({ errors: errorMessages });
+  if (errors.array().length > 0) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: errors.array()[0].msg });
   }
+  next();
 };
-
 module.exports = {
-  validatePackageCreation,
-  validatePackageUpdate,
-  handleValidationErrors,
+  validateSignUpRequest,
+  isRequestValidated,
 };

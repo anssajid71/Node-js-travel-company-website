@@ -1,19 +1,19 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { AttachmentsService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createAttachment = async (req, res) => {
   try {
     const newAttachment = await AttachmentsService.createAttachment(req.body);
     const token = generateToken(newAttachment);
 
-    res
-      .status(201)
-      .json({
-        message: 'Attachment created successfully',
-        token,
-        newAttachment,
-      });
+    res.status(201).json({
+      message: 'Attachment created successfully',
+      token,
+      expires_in: jwtExpiration,
+      newAttachment,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

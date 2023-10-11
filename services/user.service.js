@@ -1,4 +1,23 @@
 const { User } = require('../models/index');
+const bcrypt = require('bcrypt');
+const { generateToken } = require('../config/generatetoken');
+
+const signInUser = async (email, password) => {
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.hash_password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid password.');
+    }
+    const token = generateToken(user);
+    return { user, token };
+  } catch (error) {
+    throw error;
+  }
+};
 
 const createUser = async (userData) => {
   try {
@@ -65,4 +84,5 @@ module.exports = {
   deleteUser,
   getUserById,
   getAllUser,
+  signInUser,
 };

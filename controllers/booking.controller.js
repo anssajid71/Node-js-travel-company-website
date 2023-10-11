@@ -1,6 +1,7 @@
 const { SUCCESS_CODE, ERROR_CODES } = require('../constants');
 const { BookingService } = require('../services/index');
 const { generateToken } = require('../config/generatetoken');
+const { jwtExpiration } = require('../middlewares/env');
 
 const createBooking = async (req, res) => {
   try {
@@ -9,7 +10,12 @@ const createBooking = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: 'Booking created successfully', token, newBooking });
+      .json({
+        message: 'Booking created successfully',
+        token,
+        expires_in: jwtExpiration,
+        newBooking,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

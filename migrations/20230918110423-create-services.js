@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       package_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        unique: true
       },
       service_name: {
         type: Sequelize.STRING

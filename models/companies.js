@@ -16,7 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Companies.init(
     {
-      user_id: DataTypes.INTEGER,
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true,
+      },      
       name: DataTypes.STRING,
       logo: DataTypes.STRING,
       phone_number: DataTypes.STRING,

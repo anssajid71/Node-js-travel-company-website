@@ -22,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Services.init(
     {
-      package_id: DataTypes.INTEGER,
+      package_id: {
+        type: DataTypes.INTEGER,
+        unique: true,
+      },
       service_name: DataTypes.STRING,
     },
     {

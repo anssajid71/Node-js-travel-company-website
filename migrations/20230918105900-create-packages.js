@@ -12,8 +12,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      description: {
+      email: {
         type: Sequelize.TEXT,
+        unique: true,
       },
       price: {
         type: Sequelize.DECIMAL,
