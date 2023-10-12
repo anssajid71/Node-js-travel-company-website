@@ -19,10 +19,10 @@ module.exports = {
         type: Sequelize.DATE,
       },
       type: {
-        type: Sequelize.ENUM('Individual', 'Group'), // Define allowed values
-        allowNull: false, // Adjust allowNull based on your requirements
+        type: Sequelize.ENUM('Individual', 'Group'), 
+        allowNull: false,
         role: {
-          type: Sequelize.ENUM('Client', 'Admin', 'Staff'), // Allowed ENUM values
+          type: Sequelize.ENUM('Client', 'Admin', 'Staff'),
           allowNull: false,
         },
       },

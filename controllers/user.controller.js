@@ -16,9 +16,10 @@ const signInUser = async (req, res) => {
         message: 'User not found. Please sign up first.',
       });
     }
+console.log("user", user.password,  password);
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
+    // const isPasswordValid = await bcrypt.compare(user.password, password );
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
     if (!isPasswordValid) {
       return res.status(ERROR_CODES.BAD_REQUEST).json({
         error: true,

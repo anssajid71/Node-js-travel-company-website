@@ -23,12 +23,17 @@ const { generateToken } = require('../config/generatetoken');
 //   }
 // }
 
-
 const createUser = async (userData) => {
   try {
-//     const saltRounds = 10; 
-// const hashedPassword = await bcrypt.hash(userData.Password, saltRounds);
-// userData.Password = hashedPassword;
+    const saltRounds = 10;
+    console.log('---->', userData);
+    const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+    userData.password = hashedPassword;
+
+    // const hashedRetypePassword = await bcrypt.hash(userData.retype_password, saltRounds);
+    // userData.retype_password = hashedRetypePassword;
+
+    
 
     return await User.create(userData);
   } catch (error) {
@@ -100,5 +105,5 @@ module.exports = {
   getUserById,
   getAllUser,
   // signInUser,
-  findUserByEmail
+  findUserByEmail,
 };

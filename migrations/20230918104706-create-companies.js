@@ -22,7 +22,7 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING,
       },
-      payment_status: {
+      payment_status: { 
         type: Sequelize.STRING,
       },
       createdAt: {

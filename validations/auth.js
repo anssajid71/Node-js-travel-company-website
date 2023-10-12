@@ -16,14 +16,15 @@ const validateSignUpRequest = [
     }),
   check('password')
     .isLength({ min: 4 })
-    .withMessage('Password must be at least 6 characters long'),
+    .withMessage('Password must be at least 4 characters long'),
+    
 ];
 
 const validateSignIpRequest = [
   check("email").isEmail().withMessage("Valid Email required"),
   check("password")
-      .isLength({ min: 6 })
-      .withMessage("Password must be at least 6 character long"),
+      .isLength({ min: 4 })
+      .withMessage("Password must be at least 4 character long"),
   ]
 
 const isRequestValidated = (req, res, next) => {
