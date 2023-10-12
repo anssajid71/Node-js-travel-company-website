@@ -2,31 +2,34 @@ const { User } = require('../models/index');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../config/generatetoken');
 
-const signInUser = async (email, password) => {
-  try {
-    const user = await User.findOne({ where: { email } });
+// const signInUser = async (email, password) => {
+//   try {
+//     const user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      throw new Error('User not found.');
-    }
+//     if (!user) {
+//       throw new Error('User not found.');
+//     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-      throw new Error('Incorrect password.');
-    }
+//     if (!isPasswordValid) {
+//       throw new Error('Incorrect password.');
+//     }
 
-    const token = generateToken(user);
-    return { user, token };
-  } catch (error) {
-    throw error;
-  }
-}
+//     const token = generateToken(user);
+//     return { user, token };
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 
 const createUser = async (userData) => {
   try {
-    
+//     const saltRounds = 10; 
+// const hashedPassword = await bcrypt.hash(userData.Password, saltRounds);
+// userData.Password = hashedPassword;
+
     return await User.create(userData);
   } catch (error) {
     throw error;
@@ -96,6 +99,6 @@ module.exports = {
   deleteUser,
   getUserById,
   getAllUser,
-  signInUser,
-  findUserByEmail,
+  // signInUser,
+  findUserByEmail
 };
